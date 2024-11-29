@@ -10,7 +10,7 @@ app.use(express.static('public'));
 app.use(cookieParser());
 
 const dbUrl = process.env.DB_URL;
-const database = 'bobbleheads';
+const database = 'bubbleheads';
 
 mongoose.connect(`${dbUrl}/${database}`).then(()=>{
     console.info("DB connected")
