@@ -1,0 +1,65 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#content {
+  width: 100vw;
+  height: 100vh;
+  &_arena {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+      to bottom,
+      #87cefa 35%,
+      #e7f29d 40%,
+      #e7f29d 60%,
+      #d1b08c 100%
+    );
+  }
+}
+
+#chat {
+  position: absolute;
+  width: 30vw;
+  height: calc(50vh - 2px);
+  //background-color: rgb(86, 124, 98);
+  border: 1px solid black;
+  left: 0;
+  bottom: 0;
+  &_pastMessages {
+    width: 100%;
+    height: 80%;
+    background-color: rgba(94, 169, 244, 0.284);
+    color: rgba(0, 0, 0, 0.284);
+
+    &:hover {
+      background-color: rgba(94, 169, 244, 0.8);
+      color: rgba(0, 0, 0, 0.8);
+    }
+    h1 {
+      padding: 0;
+      margin: 0;
+    }
+  }
+  &_messageBox {
+    width: 100%;
+    height: 20%;
+    // background-color: rgba(61, 74, 56, 0.87);
+    input {
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      padding: 0;
+      font-size: 2rem;
+    }
+  }
+}
+.agent {
+  position: relative;
+  width: 5vh;
+  height: 5vw;
+  border-radius: 20px;
+  left: 35vw;
+  top: 60vh;
+  background-color: brown;
+}
