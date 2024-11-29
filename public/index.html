@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BubbleHeads Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="./dist/index.css">
+  <script src="./dist/index.js" defer></script>
+</head>
+<body>
+  <div class="form-container">
+    <div id="loginForm" class="form-box login">
+      <h2 class="login__title">Login</h2>
+      <form id="loginForm">
+        <label for="email">Email Address</label>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="email" placeholder="Enter your email address">
+        </div>
+        <label for="password">Password</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="Enter your password">
+        </div>
+        <div class="remember-me">
+          <input type="checkbox" id="remember">
+          <label for="remember">Remember Me</label>
+        </div>
+        <button type="submit" class="btn">Log In</button>
+        <a href="#" class="forgot-password">Lost Your Password?</a>
+      </form>
+    </div>
+
+    <div class="form-box registerform" id="registerForm" style="display: none;">
+      <h2 class="registerform__title">Register</h2>
+      <form id="registerForm">
+        <label for="username">Username</label>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="username" placeholder="Enter your username">
+        </div>
+        <label for="email-register">Email Address</label>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email-register" placeholder="Enter your email address">
+        </div>
+        <label for="password-register">Password</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password-register" placeholder="Enter your password">
+        </div>
+        <label for="confirm-password">Confirm Password</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirm-password" placeholder="Confirm your password">
+        </div>
+        <button type="submit" class="btn">Register</button>
+        <button id="backToLogin" type="button" class="btn registerform-btn">Back to Login</button>
+      </form>
+    </div>
+    
+    <div class="form-box register">
+      <h2 class="register__title">Welcome!</h2>
+      <p class="register__description">Don't have an account? Register one!</p>
+      <button id="registerBtn" class="btn register-btn">Register an Account</button>
+    </div>
+  </div>
+</body>
+</html>

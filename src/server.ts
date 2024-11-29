@@ -4,12 +4,14 @@ import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 const app = express()
 const port = 3000;
+export const secretKey = "1234";
+export const saltRounds = 10
 
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());
 
-const dbUrl = process.env.DB_URL;
+const dbUrl = "mongodb+srv://BubbleCluster:sdHHk2i2XjIrUSz3@bubblecluster.o874e.mongodb.net";
 const database = 'bubbleheads';
 
 mongoose.connect(`${dbUrl}/${database}`).then(()=>{
@@ -21,6 +23,8 @@ mongoose.connect(`${dbUrl}/${database}`).then(()=>{
 //routes
 /*import xRouter from './routes/x/xRoutes';
 app.use("/api/x", xRouter);*/
+import userRouter from './routes/user/userRoutes';
+app.use("/api/users", userRouter);
 
 app.listen(port, () => {
     console.log(`BubbleHead server is up!`)
