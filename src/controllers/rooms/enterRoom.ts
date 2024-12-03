@@ -7,8 +7,9 @@ export async function enterRoom(req: any, res: any) {
     const { id } = req.body;
     const { user } = req.cookies;
     const decryptedUser=await jwt.decode(user,secretKey);
+    //console.log(decryptedUser);
     if(!decryptedUser) throw new Error("error decoding user")
-       const newRoom =await RoomUserModel.create({userID:decryptedUser.id,roomID:id});
+       const newRoom =await RoomUserModel.create({userID:decryptedUser.userId,roomID:id});
     res.json({message:`success! room called ${newRoom} was created`})
   } catch (error) {
     console.error("Error during room creation:", error);
