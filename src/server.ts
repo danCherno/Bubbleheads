@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());
 
-const dbUrl = "mongodb+srv://BubbleCluster:sdHHk2i2XjIrUSz3@bubblecluster.o874e.mongodb.net";
+const dbUrl = process.env.DB_URL;
 const database = 'bubbleheads';
 
 mongoose.connect(`${dbUrl}/${database}`).then(()=>{
