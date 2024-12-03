@@ -4,8 +4,8 @@ import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 const app = express()
 const port = 3000;
-export const secretKey = "1234";
-export const saltRounds = 10
+export const secretKey = "1234"; //TODO: move to .env
+export const saltRounds = 10 //TODO: move to .env
 
 app.use(express.json());
 app.use(express.static('public'));
