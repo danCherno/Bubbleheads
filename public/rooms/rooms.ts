@@ -27,16 +27,21 @@ function renderRooms(Rooms) {
     let roomsSize;
 
     Rooms.forEach((room) => {
-      if (room.population === 0) {
-        roomsSize = "empty";
-      } else if (room.population < 5) {
-        roomsSize = "small";
-      } else if (room.population < 7) {
-        roomsSize = "medium";
-      } else if (room.population < 9) {
+      switch (true) {
+        case room.population === 0:
+          roomsSize = "empty";
+          break;
+        case room.population < 5:
+          roomsSize = "small";
+          break;
+        case room.population < 7:
+          roomsSize = "medium";
+          break;
+        case room.population < 9:
           roomsSize = "large";
-      } else {
-        roomsSize = "full";
+          break;
+        default:
+          roomsSize = "full";
       }
       roomsContainElement.innerHTML += ` <div class="room" id="${
         room.id
