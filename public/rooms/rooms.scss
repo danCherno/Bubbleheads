@@ -49,6 +49,19 @@ body {
   }
 }
 
+#addRoom
+{
+  position: fixed;
+  bottom: 0;
+  background-color: rgb(125, 154, 248);
+  width: 100%;
+  height: 15vh;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+
+}
+
 //we can change it later with code instead and make the color shift in relation to the population
 .empty {
   width: 5%;
