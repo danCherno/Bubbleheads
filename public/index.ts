@@ -64,7 +64,7 @@ async function loginUser(event: Event) {
       (document.getElementById("email") as HTMLInputElement).value = '';
       (document.getElementById("password") as HTMLInputElement).value = '';
 
-      window.location.href = '/dashboard';
+      window.location.href = '/rooms/rooms.html';
     } else {
       console.error('Login failed:', data.message);
     }
