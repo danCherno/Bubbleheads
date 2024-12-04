@@ -9,7 +9,7 @@ export async function getRooms(req: any, res: any) {
     const { user } = req.cookies;
 
     const decryptedUser = jwt.decode(user, secretKey) 
-    console.log(decryptedUser);
+    //console.log(decryptedUser);
    //const population =RoomUserModel.find({roomId: }).length
     //todo check user exists is real 
     const rooms = await RoomModel.find();
