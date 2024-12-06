@@ -7,21 +7,7 @@
     <link rel="stylesheet" href="./dist/lobby.css" />
     <script src="./dist/lobby.js" defer></script>
   </head>
-  <body>
-    <div id="content">
-        <div id="content_arena">
-            <div class="agent"></div>
-        </div>
-        <div id="chat">
-            <div id="chat_pastMessages">
-                <h1>example : hi!</h1>
-                <h1>example : bye!</h1>
-            </div>
-            <div id="chat_messageBox">
-                <input type="text" placeholder="what is on your mind ?">
-            </div>
-        </div>
-    </div>
-    
+  <body onload="renderLobbyElements()">
+    <div id="content"></div>  
   </body>
 </html>
