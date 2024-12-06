@@ -34,7 +34,7 @@ async function renderLobbyElements()
                 ${/*users.forEach(agent => {`<div class="agent"></div>`}).join() //uncomment this instead of rest of line when lobbyUser is configured*/'<div class="agent"></div>'}
                 <div id="chat">
                     <div id="chat_pastMessages">
-                    ${/*messages.forEach(message => {`<h1>${message}</h1>`}).join() //uncomment this instead of rest of line when lobbyUser is configured*/`<h1>DELETEME</h1>`}
+                    ${messages.forEach(message => {`<h1>${message}</h1>`})}
                     </div>
                     <div id="chat_messageBox">
                         <input type="text" placeholder="what is on your mind ?">
