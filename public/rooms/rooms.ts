@@ -106,6 +106,8 @@ function renderRoom(room, population) {
     console.error("error rendering rooms: ", error);
   }
 }
+
+//const socket = io('http://localhost:3000');
 async function handleEnterRoom(id) {
   try {
     const response = await fetch("/api/rooms/enter-room", {
@@ -118,7 +120,9 @@ async function handleEnterRoom(id) {
 
     const data = await response.json();
     console.log(data);
-    if (!data.error) console.log("entered room id: ", id);
+    if (data.error) throw new Error("failed joining room")
+      console.log("entered room id: ", id);
+    window.location.href = "/lobby/lobby.html";
   } catch (error) {
     console.error(error);
   }

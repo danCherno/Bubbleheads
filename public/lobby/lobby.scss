@@ -32,7 +32,7 @@ body {
     height: 80%;
     background-color: rgba(94, 169, 244, 0.284);
     color: rgba(0, 0, 0, 0.284);
-
+    overflow-y:auto;
     &:hover {
       background-color: rgba(94, 169, 244, 0.8);
       color: rgba(0, 0, 0, 0.8);
