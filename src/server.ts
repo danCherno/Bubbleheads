@@ -4,8 +4,8 @@ import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 const app = express()
 const port = 3000;
-export const secretKey = "1234";
-export const saltRounds = 10
+export const secretKey = process.env.SECRET_KEY || "1234";
+export const saltRounds = process.env.SALT_ROUNDS || 3;
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -23,10 +23,9 @@ mongoose.connect(`${dbUrl}/${database}`).then(()=>{
 //routes
 import userRouter from './routes/user/userRoutes';
 app.use("/api/users", userRouter);
-import roomRouter from './routes/room/roomRoutes';
-app.use("/api/rooms", roomRouter);
-
+import lobbyRouter from './routes/lobby/lobbyRoutes';
+app.use("/api/lobby", lobbyRouter);
 
 app.listen(port, () => {
     console.log(`BubbleHead server is up!`)
-  })
+  });
