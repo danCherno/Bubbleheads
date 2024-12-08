@@ -10,6 +10,7 @@ async function renderLobbyElements()
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({lobby})
         });
+
         if (!ifAuthorized.ok) throw new Error("You have not been authorized to enter this lobby");
 
         const appElement = document.querySelector("#content");
@@ -20,8 +21,9 @@ async function renderLobbyElements()
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({lobby})
         });
-        const users = await usersReq.json();
-        //if (!users) throw new Error("An error has accured while loading the lobby"); //uncomment this when lobbyUser is configured
+        const {users} = await usersReq.json();
+     
+        if (!users) throw new Error("An error has accured while loading the lobby"); //uncomment this when lobbyUser is configured
 
         const messagesReq = await fetch("/api/lobby/getLobbyMessages",{
             method:'POST',
@@ -31,19 +33,20 @@ async function renderLobbyElements()
         const { messages } = await messagesReq.json();
         if (!messages) throw new Error("An error has accured while loading the lobby");
 
-        appElement.innerHTML = 
-        `
-            <div id="arena">
-                ${/*users.forEach(agent => {`<div class="agent"></div>`}).join() //uncomment this instead of rest of line when lobbyUser is configured*/'<div class="agent"></div>'}
-                <div id="chat">
-                    <div id="chat_pastMessages">
-                    ${messages.forEach(message => {`<h1>${message}</h1>`})}
-                    </div>
-                    <div id="chat_messageBox">
-                        <input type="text" placeholder="what is on your mind ?">
-                    </div>
+        appElement.innerHTML = `
+        <div id="arena">
+            ${users.map(agent => `<div class="agent"></div>`).join('')}
+            <div id="chat">
+                <div id="chat_pastMessages">
+                    ${messages.map(message => `<h1>${message}</h1>`).join('')}
+                </div>
+                <div id="chat_messageBox">
+                    <input type="text" placeholder="What is on your mind?">
+                </div>
             </div>
-        `
+        </div>
+    `;
+        
     }
     catch (error)
     {
