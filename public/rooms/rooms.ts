@@ -108,6 +108,12 @@ function renderRoom(room, population) {
 }
 async function handleEnterRoom(id) {
   try {
+    await fetch("/api/rooms/leave-room", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    })
     const response = await fetch("/api/rooms/enter-room", {
       method: "POST",
       headers: {
@@ -116,9 +122,11 @@ async function handleEnterRoom(id) {
       body: JSON.stringify({ id }),
     });
 
-    const data = await response.json();
-    console.log(data);
-    if (!data.error) console.log("entered room id: ", id);
+    console.log(response);
+    if (response.ok)
+    {
+      window.location.href = `/lobby/lobby.html?id=${id}`;
+    }
   } catch (error) {
     console.error(error);
   }

@@ -25,6 +25,8 @@ import userRouter from './routes/user/userRoutes';
 app.use("/api/users", userRouter);
 import lobbyRouter from './routes/lobby/lobbyRoutes';
 app.use("/api/lobby", lobbyRouter);
+import roomRouter from './routes/room/roomRoutes';
+app.use("/api/rooms", roomRouter);
 
 app.listen(port, () => {
     console.log(`BubbleHead server is up!`)

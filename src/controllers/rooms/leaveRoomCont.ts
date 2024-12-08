@@ -1,13 +1,15 @@
-import { RoomUserModel } from "../../models/linkingTable/RoomUserModel";
+import { LobbyUsersModel } from "../../models/lobbyUsersModel";
+import jwt from 'jwt-simple';
+import { secretKey } from "../../server";
 
 export async function leaveRoom(req: any, res: any) {
   try {
-    const { id } = req.body; 
-    const roomLeave = await RoomUserModel.findOneAndDelete({userID:id});
-    if(!roomLeave) throw new Error("no such user id in any room");
+    const { user } = req.cookies;
+    const decryptedUser= jwt.decode(user,secretKey).userId;
+    const roomLeave = await LobbyUsersModel.findOneAndDelete({user:decryptedUser});
     res.json({message:`success! left room`,roomLeave})
   } catch (error) {
     console.error("Error during population check:", error);
     return res.status(500).json({ message: "Server error" });
   }
-}
+} 

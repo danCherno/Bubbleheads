@@ -2,10 +2,13 @@ async function renderLobbyElements()
 {
     try
     {
+        const params = new URLSearchParams(window.location.search);
+        const lobby = params.get('id');
+
         const ifAuthorized = await fetch("/api/lobby/isAuthorized",{
             method:'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({lobby: sessionStorage.getItem('lobby')})
+            body: JSON.stringify({lobby})
         });
         if (!ifAuthorized.ok) throw new Error("You have not been authorized to enter this lobby");
 
@@ -15,7 +18,7 @@ async function renderLobbyElements()
         const usersReq = await fetch("/api/lobby/getLobbyUsers",{
             method:'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({lobby: sessionStorage.getItem('lobby')})
+            body: JSON.stringify({lobby})
         });
         const users = await usersReq.json();
         //if (!users) throw new Error("An error has accured while loading the lobby"); //uncomment this when lobbyUser is configured
@@ -23,7 +26,7 @@ async function renderLobbyElements()
         const messagesReq = await fetch("/api/lobby/getLobbyMessages",{
             method:'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({lobby: sessionStorage.getItem('lobby')})
+            body: JSON.stringify({lobby})
         });
         const { messages } = await messagesReq.json();
         if (!messages) throw new Error("An error has accured while loading the lobby");
