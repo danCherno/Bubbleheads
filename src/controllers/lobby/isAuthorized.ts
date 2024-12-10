@@ -17,7 +17,7 @@ export async function isAuthorized(req: any, res: any)
         if(!users) throw new Error("error authorizing the user");
 
         res.status(200).json({users});
-        
+ 
     }
     catch(error: any)
     {
