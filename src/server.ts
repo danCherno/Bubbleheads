@@ -78,8 +78,9 @@ io.use(async (socket, next) => {
   if (!user) throw new Error("failed populating user");
 
   const name = room.user.username;
-  const lobbyId = room.lobby._id.toString(); // Convert ObjectId to string  if (!name) throw new Error("user not authorized");
-
+  const lobbyId = room.lobby._id.toString(); 
+ 
+  
   socket.user = { id: userId, name: name, roomId: lobbyId };
   next();
 });
@@ -109,7 +110,7 @@ io.on("connection", (socket) => {
       console.log("Message received:", msg);
       if (!socket.user) throw new Error("no name found");
       const name = socket.user.name;
-      io.emit("response", name + " : " + msg);
+      io.to(roomId).emit("response", name + " : " + msg);
     });
 
     socket.on("disconnect", () => {
