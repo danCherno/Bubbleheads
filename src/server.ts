@@ -23,9 +23,9 @@ mongoose.connect(`${dbUrl}/${database}`).then(()=>{
 //routes
 import userRouter from './routes/userRoutes';
 app.use("/api/users", userRouter);
-import lobbyRouter from './routes/lobby/lobbyRoutes';
+import lobbyRouter from './routes/lobbyRoutes';
 app.use("/api/lobby", lobbyRouter);
-import roomRouter from './routes/room/roomRoutes';
+import roomRouter from './routes/roomRoutes';
 app.use("/api/rooms", roomRouter);
 
 app.listen(port, () => {
