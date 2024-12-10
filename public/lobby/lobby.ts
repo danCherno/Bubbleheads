@@ -1,3 +1,6 @@
+const params = new URLSearchParams(window.location.search);
+const lobby = params.get("id");
+
 const socket = io("http://localhost:3000");
 
 //chatInput.addEventListener("keypress", handleKeypress);
@@ -22,9 +25,7 @@ function submit(event) {
     console.error("an error has occurred ", error);
   }
 }
-socket.on("connect", (data) => {
-  console.log(data);
-});
+
 socket.on("response", (data) => {
   addToChat(data);
 });
@@ -32,18 +33,20 @@ socket.on("message", (data) => {
   console.log(data);
 });
 
-function addToChat(message: string) {
+function addToChat(message: any) {
+
   const chatLogElement = document.getElementById(
     "chat_pastMessages"
   ) as HTMLElement;
   chatLogElement.innerHTML += `<h1>${message}</h>`;
 }
-
+socket.on("connect", (data) => {
+    console.log(data);
+  });
 async function renderLobbyElements() {
   try {
-    const params = new URLSearchParams(window.location.search);
-    const lobby = params.get("id");
 
+   
     const appElement = document.querySelector("#content");
     if (!appElement)
       throw new Error("An error has occurred while loading the lobby");

@@ -1,120 +1,120 @@
-import express from 'express';
+import express from "express";
 import mongoose from "mongoose";
-import cookieParser from 'cookie-parser'; 
-import 'dotenv/config';
+import cookieParser from "cookie-parser";
+import "dotenv/config";
 import { Server } from "socket.io";
 import http from "http";
-import jwt from 'jwt-simple';
+import jwt from "jwt-simple";
+import { LobbyUsersModel } from "./models/lobbyUsersModel";
 
-const app = express()
+const app = express();
 const port = 3000;
 
 export const secretKey = process.env.SECRET_KEY || "1234";
 export const saltRounds = process.env.SALT_ROUNDS || 3;
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(cookieParser());
 
 const dbUrl = process.env.DB_URL;
-const database = 'bubbleheads';
+const database = "bubbleheads";
 
-mongoose.connect(`${dbUrl}/${database}`).then(()=>{
-    console.info("DB connected")
-}).catch((err)=>{
-    console.error(err)
-});
+mongoose
+  .connect(`${dbUrl}/${database}`)
+  .then(() => {
+    console.info("DB connected");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 //routes
-import userRouter from './routes/userRoutes';
+import userRouter from "./routes/userRoutes";
 app.use("/api/users", userRouter);
-import lobbyRouter from './routes/lobbyRoutes';
+import lobbyRouter from "./routes/lobbyRoutes";
 app.use("/api/lobby", lobbyRouter);
-import roomRouter from './routes/roomRoutes';
-import { isAuthorized } from './controllers/lobby/isAuthorized';
-import { UserModel } from './models/userModel';
+import roomRouter from "./routes/roomRoutes";
 app.use("/api/rooms", roomRouter);
 
-
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
     origin: "*", // Or specify your frontend URL
     methods: ["GET", "POST"],
   },
 });
+
 declare module "socket.io" {
-    interface Socket {
-      user?: { id: string; name: string }; // Define the 'user' property type
-    }
+  interface Socket {
+    user?: { id: string; name: string; roomId: string }; // Define the 'user' property type
   }
-io.use(async(socket, next) => {
-    // Access cookies from the handshake headers
-    const cookies = socket.handshake.headers.cookie;
-  
-    if (!cookies) {
-      return next(new Error("No cookies found"));
-    }
-  
-    // Parse cookies (using a utility function)
-    const parsedCookies = parseCookies(cookies);
-  
-    // Retrieve the token from cookies
-    const token = parsedCookies.token; // Example: if your token is stored in a 'token' cookie
-  
-    if (!token) {
-      return next(new Error("Authentication error: No token found"));
-    }
-    const userId = jwt.decode(token, secretKey).userId;
-    console.log(userId);
-    const user = await UserModel.findOne({user: userId});
-    if(!user) throw new Error("user not authorized")
-    const name = user.email
-    if(!name) throw new Error("user not authorized")
-   // const users = await LobbyUsersModel.findOne({lobby}, {user: userId});
+}
 
-    // Verify the token (example using JWT)
+io.use(async (socket, next) => {
+  const cookies = socket.handshake.headers.cookie;
 
-  
-      // Attach user data to the socket
-      socket.user = { id: userId ,name:name};
-  
-      // Proceed with the connection
-      next();
-  
-  });
-  
-  // Utility function to parse cookies
-  function parseCookies(cookieString:any) {
-    return cookieString
-      .split(";")
-      .map(cookie => cookie.trim().split("="))
-      .reduce((acc, [key, value]) => ({ ...acc, [key]: decodeURIComponent(value) }), {});
+  if (!cookies) {
+    return next(new Error("No cookies found"));
   }
-  
 
+  const parsedCookies = parseCookies(cookies);
+  if (!parsedCookies) throw new Error("cookie no good");
 
+  const token = parsedCookies;
+  if (!token) {
+    return next(new Error("Authentication error: No token found"));
+  }
+  const userId = jwt.decode(token, secretKey).userId;
+
+  const room = await LobbyUsersModel.findOne({ user: userId })
+    .populate("user", "username email")
+    .populate("lobby", "name")
+    .exec();
+  if (!room) throw new Error("user not in a room");
+
+  const user = room.user;
+  if (!user) throw new Error("failed populating user");
+
+  const name = room.user.username;
+  const lobbyId = room.lobby._id.toString(); // Convert ObjectId to string  if (!name) throw new Error("user not authorized");
+
+  socket.user = { id: userId, name: name, roomId: lobbyId };
+  next();
+});
+
+// Utility function to parse cookies
+function parseCookies(cookieString: string): string | undefined {
+  return cookieString
+    .split("; ")
+    .find((row: string) => row.startsWith("user="))
+    ?.split("=")[1];
+}
 
 //connecting to socketIO
-io.on("connection",  (socket) => {
+io.on("connection", (socket) => {
   try {
+    if (!socket.user) throw new Error("no name found");
+    console.log(`User connected: ${socket.user.name}`);
+    const roomId = socket.user.roomId; // Use user-specific room or a default room
 
-    console.log(`User connected: ${socket.id}`);
-    
+    console.log(`User connected: ${socket.user.name}, joining room: ${roomId}`);
+
+    // Join the user to the room immediately after connection
+    socket.join(roomId);
     // Continue with socket event handling for the authorized user
-    socket.on("join-room", (roomId) => {
-      console.log(`User ${socket.id} joined room: ${roomId}`);
-      socket.join(roomId); // Join the user to a room
-    });
-  
- 
+
     socket.on("message", (msg) => {
       console.log("Message received:", msg);
-      io.emit("response", msg);
+      if (!socket.user) throw new Error("no name found");
+      const name = socket.user.name;
+      io.emit("response", name + " : " + msg);
     });
 
     socket.on("disconnect", () => {
-      console.log("A user disconnected", socket.id);
+        if (!socket.user) throw new Error("no name found");
+      console.log("A user disconnected", socket.user.name);
     });
   } catch (error) {
     console.error(error);

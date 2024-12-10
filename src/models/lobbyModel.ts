@@ -7,4 +7,4 @@ export const LobbySchema = new Schema({
     }
 })
 
-export const LobbyModel = model("lobby", LobbySchema);
+export const LobbyModel = model("Lobby", LobbySchema);
