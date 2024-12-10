@@ -2,7 +2,7 @@ import { LobbyModel } from "../../models/lobbyModel";
 import { LobbyUsersModel } from "../../models/lobbyUsersModel";
 import jwt from 'jwt-simple';
 import { secretKey } from "../../server";
-import { UserModel } from "../../models/users/userModel";
+import { UserModel } from "../../models/userModel";
 
 export async function isAuthorized(req: any, res: any)
 {

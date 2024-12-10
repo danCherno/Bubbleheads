@@ -1,4 +1,4 @@
-import { UserModel } from "../../models/users/userModel";
+import { UserModel } from "../../models/userModel";
 
 export async function logoutUser(res:any, req:any) {
   try {

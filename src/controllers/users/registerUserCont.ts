@@ -1,4 +1,4 @@
-import { UserModel } from "../../models/users/userModel";
+import { UserModel } from "../../models/userModel";
 import bcrypt from 'bcrypt';
 import { saltRounds } from "../../server";
 export async function registerUser(req:any, res:any) {

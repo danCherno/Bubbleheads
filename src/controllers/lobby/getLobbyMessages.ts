@@ -1,5 +1,5 @@
 import { LobbyModel } from "../../models/lobbyModel";
-import { LobbyMessagesModel } from "../../models/users/lobbyMessagesModel";
+import { LobbyMessagesModel } from "../../models/lobbyMessagesModel";
 
 export async function getLobbyMessages(req: any, res: any)
 {

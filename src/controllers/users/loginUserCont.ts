@@ -1,4 +1,4 @@
-import { UserModel } from "../../models/users/userModel";
+import { UserModel } from "../../models/userModel";
 import bcrypt from 'bcrypt';
 import jwt from 'jwt-simple';
 import { secretKey } from "../../server";
