@@ -2,8 +2,12 @@ import express from 'express';
 import mongoose from "mongoose";
 import cookieParser from 'cookie-parser'; 
 import 'dotenv/config';
+import { Server } from "socket.io";
+import http from "http";
+
 const app = express()
 const port = 3000;
+
 export const secretKey = process.env.SECRET_KEY || "1234";
 export const saltRounds = process.env.SALT_ROUNDS || 3;
 
@@ -28,6 +32,41 @@ app.use("/api/lobby", lobbyRouter);
 import roomRouter from './routes/roomRoutes';
 app.use("/api/rooms", roomRouter);
 
-app.listen(port, () => {
-    console.log(`BubbleHead server is up!`)
-  });
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Or specify your frontend URL
+    methods: ["GET", "POST"],
+  },
+});
+
+
+//connecting to socketIO
+io.on("connection",  (socket) => {
+  try {
+    const cookies = socket.handshake.headers.cookie;
+
+   if (cookies) {
+    console.log("User authorized");
+  } else {
+    console.log("User not authorized");
+    socket.disconnect(); 
+  }
+    socket.on("message", (msg) => {
+      console.log("Message received:", msg);
+      io.emit("response", msg);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("A user disconnected", socket.id);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+});
+//routes
+
+server.listen(port, () => {
+  console.log(`BubbleHead server is up on http://localhost:${port}`);
+});
