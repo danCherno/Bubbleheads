@@ -3,8 +3,6 @@ const lobby = params.get("id");
 
 const socket = io("http://localhost:3000");
 
-//chatInput.addEventListener("keypress", handleKeypress);
-
 function handleKeypress(event) {
   try {
     if (event.key === "Enter") {

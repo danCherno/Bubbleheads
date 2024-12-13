@@ -9,9 +9,6 @@ export async function getRooms(req: any, res: any) {
     const { user } = req.cookies;
 
     const decryptedUser = jwt.decode(user, secretKey) 
-    //console.log(decryptedUser);
-   //const population =RoomUserModel.find({roomId: }).length
-    //todo check user exists is real 
     const rooms = await LobbyModel.find();
     res.json({message:`success! you got some rooms`,rooms})
   } catch (error) {

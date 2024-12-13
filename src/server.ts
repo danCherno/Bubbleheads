@@ -20,6 +20,7 @@ app.use(cookieParser());
 const dbUrl = process.env.DB_URL;
 const database = "bubbleheads";
 
+//db connection
 mongoose
   .connect(`${dbUrl}/${database}`)
   .then(() => {
@@ -37,6 +38,7 @@ app.use("/api/lobby", lobbyRouter);
 import roomRouter from "./routes/roomRoutes";
 app.use("/api/rooms", roomRouter);
 
+//socket initialization
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -93,21 +95,16 @@ function parseCookies(cookieString: string): string | undefined {
     ?.split("=")[1];
 }
 
-//connecting to socketIO
+//connection to socketIO
 io.on("connection", (socket) => {
   try {
     if (!socket.user) throw new Error("no name found");
-    console.log(`User connected: ${socket.user.name}`);
-    const roomId = socket.user.roomId; // Use user-specific room or a default room
+    const roomId = socket.user.roomId; 
 
-    console.log(`User connected: ${socket.user.name}, joining room: ${roomId}`);
-
-    // Join the user to the room immediately after connection
     socket.join(roomId);
-    // Continue with socket event handling for the authorized user
 
+    // socket event handling for the authorized user
     socket.on("message", (msg) => {
-      console.log("Message received:", msg);
       if (!socket.user) throw new Error("no name found");
       const name = socket.user.name;
       io.to(roomId).emit("response", name + " : " + msg);
@@ -115,13 +112,11 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         if (!socket.user) throw new Error("no name found");
-      console.log("A user disconnected", socket.user.name);
     });
   } catch (error) {
     console.error(error);
   }
 });
-//routes
 
 server.listen(port, () => {
   console.log(`BubbleHead server is up on http://localhost:${port}`);
