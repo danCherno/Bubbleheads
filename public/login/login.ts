@@ -64,7 +64,7 @@ async function loginUser(event: Event) {
       (document.getElementById("email") as HTMLInputElement).value = '';
       (document.getElementById("password") as HTMLInputElement).value = '';
 
-      window.location.href = '/rooms/rooms.html';
+      window.location.href = '/rooms';
     } else {
       console.error('Login failed:', data.message);
     }
@@ -104,7 +104,7 @@ async function registerUser(event: Event) {
       (document.getElementById("password-register") as HTMLInputElement).value = '';
       (document.getElementById("confirm-password") as HTMLInputElement).value = '';
 
-      window.location.href = '/index.html';
+      window.location.href = '/';
     } else {
       console.error('Registration failed:', data.message);
     }

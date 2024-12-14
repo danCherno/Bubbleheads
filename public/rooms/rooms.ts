@@ -125,7 +125,7 @@ async function handleEnterRoom(id) {
     console.log(response);
     if (response.ok)
     {
-      window.location.href = `/lobby/lobby.html?id=${id}`;
+      window.location.href = `/lobby/?id=${id}`;
     }
   } catch (error) {
     console.error(error);

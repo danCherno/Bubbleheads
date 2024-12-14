@@ -63,8 +63,11 @@ async function renderLobbyElements() {
             </div>
         </div>
     `;
-  } catch (error) {
-    alert(error.message);
-    window.location.href = "/rooms/rooms.html";
-  }
+        
+    }
+    catch (error)
+    {
+        alert(error.message);
+        window.location.href = "/rooms/";
+    }
 }

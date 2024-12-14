@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import path from "path";
 import "dotenv/config";
 import { Server } from "socket.io";
 import http from "http";
@@ -36,6 +37,17 @@ app.use("/api/users", userRouter);
 // Lobby functions are managed via Socket.IO, no routes needed
 import roomRouter from "./routes/roomRoutes";
 app.use("/api/rooms", roomRouter);
+
+// page routes
+app.get("/lobby", (req, res) => {
+    res.sendFile(path.join(__dirname, "/../public/lobby/lobby.html"))
+});
+app.get("/rooms", (req, res) => {
+    res.sendFile(path.join(__dirname, "/../public/rooms/rooms.html"))
+});
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "/../public/login/login.html"))
+});
 
 //socket initialization
 const server = http.createServer(app);
