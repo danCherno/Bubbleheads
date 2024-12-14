@@ -33,8 +33,7 @@ mongoose
 //routes
 import userRouter from "./routes/userRoutes";
 app.use("/api/users", userRouter);
-import lobbyRouter from "./routes/lobbyRoutes";
-app.use("/api/lobby", lobbyRouter);
+// Lobby functions are managed via Socket.IO, no routes needed
 import roomRouter from "./routes/roomRoutes";
 app.use("/api/rooms", roomRouter);
 
