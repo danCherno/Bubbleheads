@@ -109,11 +109,34 @@ function parseCookies(cookieString: string): string | undefined {
 //connection to socketIO
 io.on("connection", (socket) => {
   try {
+    
     if (!socket.user) throw new Error("no name found");
     const roomId = socket.user.roomId; 
 
+   
     socket.join(roomId);
 
+    socket.on("update-position", (x,y) => {
+      //console.log(x,y);
+      if (!socket.user) throw new Error("no name found");
+      const id = socket.user.id;
+      io.to(roomId).emit("change-position",x,y,id );
+
+    });
+
+    socket.on("send-users", () => {
+      const room = io.sockets.adapter.rooms.get(roomId);
+      if (room) {
+        const users = Array.from(room).map((socketId) => {
+          const userSocket = io.sockets.sockets.get(socketId);
+          return userSocket?.user || null; // Include user data from each socket
+        }).filter(Boolean); // Filter out null values
+
+        socket.emit("show-users", users);
+      } else {
+        socket.emit("show-users", []); // Send empty array if no users are in the room
+      }
+    });
     // socket event handling for the authorized user
     socket.on("message", (msg) => {
       if (!socket.user) throw new Error("no name found");

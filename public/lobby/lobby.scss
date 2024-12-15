@@ -6,7 +6,9 @@ body {
 #content {
   width: 100vw;
   height: 100vh;
-  &_arena {
+  #arena {
+    overflow: hidden;
+
     width: 100%;
     height: 100%;
     background-image: linear-gradient(
@@ -27,6 +29,7 @@ body {
   border: 1px solid black;
   left: 0;
   bottom: 0;
+  z-index: 9999;
   &_pastMessages {
     overflow-y: auto;
     width: 100%;
@@ -46,7 +49,6 @@ body {
   &_messageBox {
     width: 100%;
     height: 20%;
-
     // background-color: rgba(61, 74, 56, 0.87);
     input {
       width: calc(100% - 4px);
@@ -57,11 +59,25 @@ body {
   }
 }
 .agent {
-  position: relative;
+  position: absolute;
   width: 5vh;
-  height: 5vw;
-  border-radius: 20px;
-  left: 35vw;
-  top: 60vh;
-  background-color: brown;
+  height: 10vw;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+
+  .avatar {
+    width: 100%;
+    height: 70%;
+    border-radius: 20px;
+
+    background-color: brown;
+  }
+  .name {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    height: 30%;
+  }
 }
