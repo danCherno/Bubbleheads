@@ -116,6 +116,9 @@ io.on("connection", (socket) => {
    
     socket.join(roomId);
 
+    socket.to(roomId).emit("user-joined", socket.user);
+    
+ 
     socket.on("update-position", (x,y) => {
       //console.log(x,y);
       if (!socket.user) throw new Error("no name found");
@@ -134,18 +137,22 @@ io.on("connection", (socket) => {
 
         socket.emit("show-users", users);
       } else {
-        socket.emit("show-users", []); // Send empty array if no users are in the room
+        socket.emit("show-users", []); 
       }
     });
     // socket event handling for the authorized user
     socket.on("message", (msg) => {
       if (!socket.user) throw new Error("no name found");
       const name = socket.user.name;
-      io.to(roomId).emit("response", name + " : " + msg);
+      io.to(roomId).emit("response", name , msg,socket.user.id);
     });
 
     socket.on("disconnect", () => {
         if (!socket.user) throw new Error("no name found");
+
+        io.to(roomId).emit("user-left",socket.user.id);
+
+
     });
   } catch (error) {
     console.error(error);
