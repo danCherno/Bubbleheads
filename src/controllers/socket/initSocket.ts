@@ -4,6 +4,7 @@ import { parseCookies } from "./parseCookies";
 import jwt from "jwt-simple";
 
 export async function initSocket(socket: any, next: (error?: Error) => void) {
+  try {
   const cookies = socket.handshake.headers.cookie;
 
   if (!cookies) {
@@ -33,4 +34,8 @@ export async function initSocket(socket: any, next: (error?: Error) => void) {
 
   socket.user = { id: userId, name: name, roomId: lobbyId };
   next();
+ } catch (error:any) {
+    console.error(error); 
+    next(new Error(error.message || "An error occurred during socket initialization"));
+  }
 }

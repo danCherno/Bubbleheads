@@ -53,6 +53,9 @@ function deleteUserElement(id) {
 }
 
 function handleClick(event) {
+  if (event.target.tagName === "BUTTON" || event.target.tagName === "INPUT")
+    return;
+
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
@@ -62,10 +65,7 @@ function handleClick(event) {
   const relativeX = mouseX - arenaRect.left; // Relative X inside arena
   const relativeY = mouseY - arenaRect.top; // Relative Y inside arena
 
-  const inputElement = document.getElementById("chatInput") as HTMLElement;
-  if (document.activeElement !== inputElement) {
-    socket.emit("update-position", relativeX, relativeY);
-  }
+  socket.emit("update-position", relativeX, relativeY);
 }
 
 function renderUser(user) {
@@ -83,7 +83,7 @@ function renderUser(user) {
 
   userElement.classList.add("agent");
   userElement.id = user.id;
- 
+
   userElement.appendChild(userAvatarElement);
   userElement.appendChild(userNameElement);
 
@@ -97,7 +97,7 @@ function renderUser(user) {
 
     userElement.style.transform = `translate(${x - avatarWCenter}px, ${
       y - avatarHCenter
-    }px)`
+    }px)`;
   }
 }
 
@@ -134,7 +134,6 @@ function submit(event) {
 
     chatInput.value = "";
     socket.emit("message", message);
-
   } catch (error) {
     console.error("an error has occurred ", error);
   }
@@ -142,7 +141,6 @@ function submit(event) {
 
 async function renderLobbyElements() {
   try {
-
     const appElement = document.querySelector("#content");
     if (!appElement)
       throw new Error("An error has occurred while loading the lobby");
@@ -158,13 +156,35 @@ async function renderLobbyElements() {
                 </div>
             </div>
         </div>
+      <button id="leaveRoom" onclick="leaveRoom()">Leave Room</button>
     `;
 
     socket.emit("send-users");
-
   } catch (error) {
-    
     alert(error.message);
     window.location.href = "/rooms/";
+  }
+}
+async function leaveRoom() {
+  try {
+    console.log("aaaa");
+    const response = await fetch("/api/rooms/leave-room", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log(data.message);
+      socket.disconnect();
+
+      window.location.href = "/rooms";
+    } else {
+      console.error("Error:", data.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
   }
 }

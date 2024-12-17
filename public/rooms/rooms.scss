@@ -133,3 +133,23 @@ body {
     }
   }
 }
+#logOut
+{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 2vw;
+  height: 3vw;
+  width: 9vw;
+  background-color: #3194f8; 
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.2vw;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  &:hover {
+    background-color: #4682b4; 
+    transform: translateY(-5px); 
+  }
+}

@@ -7,6 +7,37 @@ interface Room {
 function main() {
   getRooms();
   addRoomRender();
+  renderLogOutButton();
+}
+function renderLogOutButton() {
+  const logOutBtn = document.createElement("button") as HTMLButtonElement;
+  logOutBtn.innerText = "Log Out";
+  logOutBtn.id = "logOut";
+  logOutBtn.addEventListener(`click`, logOut);
+  document.body.appendChild(logOutBtn);
+}
+async function logOut(event) {
+  try {
+    const response = await fetch('/api/users/logout-user', {
+        method: 'POST', 
+        credentials: 'include' 
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        console.log(data.message); 
+        alert('Logout successful');
+        window.location.href = '/'; 
+    } else {
+        console.error('Logout failed:', data.message);
+        alert('Logout failed: ' + data.message);
+    }
+} catch (error) {
+    console.error('Error during logout:', error);
+    alert('An error occurred while logging out.');
+}
+
 }
 function addRoomRender() {
   const addRoomElement = document.getElementById("addRoom") as HTMLElement;
@@ -112,8 +143,8 @@ async function handleEnterRoom(id) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-      }
-    })
+      },
+    });
     const response = await fetch("/api/rooms/enter-room", {
       method: "POST",
       headers: {
@@ -123,8 +154,7 @@ async function handleEnterRoom(id) {
     });
 
     console.log(response);
-    if (response.ok)
-    {
+    if (response.ok) {
       window.location.href = `/lobby/?id=${id}`;
     }
   } catch (error) {
