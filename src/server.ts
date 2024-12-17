@@ -61,7 +61,7 @@ const io = new Server(server, {
 
 declare module "socket.io" {
   interface Socket {
-    user?: { id: string; name: string; roomId: string }; // Define the 'user' property type
+    user?: { id: string; name: string; roomId: string,position?:{x:number,y:number} }; // Define the 'user' property type
   }
 }
 
@@ -113,18 +113,17 @@ io.on("connection", (socket) => {
     if (!socket.user) throw new Error("no name found");
     const roomId = socket.user.roomId; 
 
-   
+    if(!roomId) socket.disconnect();
     socket.join(roomId);
 
     socket.to(roomId).emit("user-joined", socket.user);
     
  
     socket.on("update-position", (x,y) => {
-      //console.log(x,y);
       if (!socket.user) throw new Error("no name found");
       const id = socket.user.id;
+      socket.user.position={x,y};
       io.to(roomId).emit("change-position",x,y,id );
-
     });
 
     socket.on("send-users", () => {
@@ -142,6 +141,7 @@ io.on("connection", (socket) => {
     });
     // socket event handling for the authorized user
     socket.on("message", (msg) => {
+      if(msg==="") return;
       if (!socket.user) throw new Error("no name found");
       const name = socket.user.name;
       io.to(roomId).emit("response", name , msg,socket.user.id);

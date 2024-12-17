@@ -8,10 +8,6 @@ socket.on("user-joined", (user) => {
   renderUser(user);
 });
 
-socket.on("connect", (data) => {
- // console.log(data);
-});
-
 socket.on("response", (name, msg, id) => {
   addToChat(name, msg, id);
 });
@@ -51,7 +47,6 @@ socket.on("change-position", (targetX, targetY, id) => {
   }
 });
 
-
 function deleteUserElement(id) {
   const userElement = document.getElementById(id) as HTMLElement;
   userElement.remove();
@@ -61,9 +56,16 @@ function handleClick(event) {
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
+  const arenaElement = document.getElementById("arena") as HTMLElement;
+  const arenaRect = arenaElement.getBoundingClientRect(); // Get arena position in the viewport
+
+  const relativeX = mouseX - arenaRect.left; // Relative X inside arena
+  const relativeY = mouseY - arenaRect.top; // Relative Y inside arena
+
   const inputElement = document.getElementById("chatInput") as HTMLElement;
-  if(document.activeElement !== inputElement)
-  socket.emit("update-position", mouseX, mouseY);
+  if (document.activeElement !== inputElement) {
+    socket.emit("update-position", relativeX, relativeY);
+  }
 }
 
 function renderUser(user) {
@@ -73,6 +75,7 @@ function renderUser(user) {
   const userAvatarElement = document.createElement("div") as HTMLElement;
   const userNameElement = document.createElement("p") as HTMLElement;
 
+  console.log(user.position);
   userNameElement.innerText = user.name;
   userNameElement.classList.add("name");
 
@@ -80,10 +83,22 @@ function renderUser(user) {
 
   userElement.classList.add("agent");
   userElement.id = user.id;
+ 
   userElement.appendChild(userAvatarElement);
   userElement.appendChild(userNameElement);
 
   arenaElement.appendChild(userElement);
+  if (user.position) {
+    const { x, y } = user.position;
+    const rect = userElement.getBoundingClientRect();
+
+    const avatarWCenter = rect.width * 0.5;
+    const avatarHCenter = rect.height * 0.7;
+
+    userElement.style.transform = `translate(${x - avatarWCenter}px, ${
+      y - avatarHCenter
+    }px)`
+  }
 }
 
 function addToChat(name, message: any, id: string) {
@@ -111,13 +126,15 @@ function handleKeypress(event) {
     console.error("an error has occurred ", error);
   }
 }
+
 function submit(event) {
   try {
     const chatInput = document.getElementById("chatInput") as HTMLInputElement;
     const message = chatInput.value;
+
     chatInput.value = "";
     socket.emit("message", message);
-   // console.log(message);
+
   } catch (error) {
     console.error("an error has occurred ", error);
   }
@@ -125,6 +142,7 @@ function submit(event) {
 
 async function renderLobbyElements() {
   try {
+
     const appElement = document.querySelector("#content");
     if (!appElement)
       throw new Error("An error has occurred while loading the lobby");
@@ -141,8 +159,11 @@ async function renderLobbyElements() {
             </div>
         </div>
     `;
+
     socket.emit("send-users");
+
   } catch (error) {
+    
     alert(error.message);
     window.location.href = "/rooms/";
   }
