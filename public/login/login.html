@@ -32,6 +32,18 @@
       </form>
     </div>
 
+    <div class="form-box" id="backToRegisterForm">
+      <h2 class="register__title">Welcome!</h2>
+      <p class="register__description">Don't have an account? Register one!</p>
+      <button id="registerBtn" class="btn register-btn" onclick="onSwitchToRegister()">Register an Account</button>
+    </div>
+
+    <div class="form-box" id="backToLoginForm">
+      <h2 class="register__title">Welcome!</h2>
+      <p class="register__description">allready registered? Sign in!</p>
+      <button id="registerBtn" class="btn register-btn" onclick="onSwitchToLogin()">Login to an Account</button>
+    </div>
+
     <div class="form-box registerform" id="registerForm" style="display: none;">
       <h2 class="registerform__title">Register</h2>
       <form id="registerForm">
@@ -56,14 +68,7 @@
           <input type="password" id="confirm-password" placeholder="Confirm your password">
         </div>
         <button type="submit" class="btn">Register</button>
-        <button id="backToLogin" type="button" class="btn registerform-btn">Back to Login</button>
       </form>
-    </div>
-    
-    <div class="form-box register">
-      <h2 class="register__title">Welcome!</h2>
-      <p class="register__description">Don't have an account? Register one!</p>
-      <button id="registerBtn" class="btn register-btn">Register an Account</button>
     </div>
   </div>
 </body>
