@@ -191,7 +191,6 @@ async function renderLobbyElements() {
 
 function mouseDown(event) {
   if (event.target.id === "chatPosition") {
-    console.log("dragging window");
     startX = event.clientX;
     startY = event.clientY;
 
