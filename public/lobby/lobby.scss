@@ -34,7 +34,7 @@ body {
   &_pastMessages {
     overflow-y: auto;
     width: 100%;
-    height: 80%;
+    height: 75%;
     background-color: rgba(94, 169, 244, 0.284);
     color: rgba(0, 0, 0, 0.284);
     user-select: text;
@@ -67,7 +67,7 @@ body {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  align-items: center; 
+  align-items: center;
 
   .avatar {
     width: 100%;
@@ -88,20 +88,20 @@ body {
 
   .bubble {
     position: absolute;
-    top: -40px; 
+    top: -40px;
     text-align: center;
     background-color: white;
     border-radius: 10px;
-    padding: 5px 10px; 
+    padding: 5px 10px;
     color: black;
     width: fit-content;
     height: fit-content;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 
     &::after {
       content: "";
       position: absolute;
-      bottom: -6px; 
+      bottom: -6px;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
@@ -120,7 +120,7 @@ body {
   margin: 3vw;
   width: 9vw;
   height: 3vw;
-  background-color: #1a7ada; 
+  background-color: #1a7ada;
   color: white;
   border: none;
   border-radius: 10px;
@@ -128,7 +128,34 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   &:hover {
-    background-color: #4682b4; 
-    transform: translateY(-5px); 
+    background-color: #4682b4;
+    transform: translateY(-5px);
+  }
+}
+
+#sizeAdjust {
+  background-color: white;
+  width: 100%;
+  height: 5%;
+  display: flex;
+  flex-direction: row;
+  #chatSize {
+    background-color: rgb(117, 117, 163);
+    text-align: center;
+    width: 95%;
+    height: 100%;
+    color: white;
+    font-size: 1.1rem;
+    font-style: oblique;
+    cursor:n-resize
+  }
+  #chatPosition {
+    cursor:grab;
+    background-color: rgb(50, 50, 114);
+    text-align: center;
+    width: 5%;
+    height: 100%;
+    color: white;
+    font-size: 1.2rem;
   }
 }

@@ -2,7 +2,6 @@ const params = new URLSearchParams(window.location.search);
 const lobby = params.get("id");
 
 const socket = io("http://localhost:3000");
-document.addEventListener("click", handleClick);
 
 socket.on("user-joined", (user) => {
   renderUser(user);
@@ -53,7 +52,7 @@ function deleteUserElement(id) {
 }
 
 function handleClick(event) {
-  if (event.target.tagName === "BUTTON" || event.target.tagName === "INPUT")
+  if (event.target.tagName === "BUTTON" || event.target.tagName === "INPUT"||dragging)
     return;
 
   const mouseX = event.clientX;
@@ -139,6 +138,7 @@ function submit(event) {
   }
 }
 
+let dragging = false;
 async function renderLobbyElements() {
   try {
     const appElement = document.querySelector("#content");
@@ -148,6 +148,12 @@ async function renderLobbyElements() {
     appElement.innerHTML = `
         <div id="arena">
             <div id="chat">
+            <div id="sizeAdjust">
+             <div id="chatSize"> ↕ </div>
+             <div id="chatPosition" ">
+          ※
+             </div>
+             </div>
                 <div id="chat_pastMessages">
                 </div>
                 <div id="chat_messageBox">
@@ -160,10 +166,53 @@ async function renderLobbyElements() {
     `;
 
     socket.emit("send-users");
+    document.addEventListener("mousedown", mouseDown);
+    document.addEventListener("mouseup", mouseUp);
+    document.addEventListener("mousemove", mouseMove);
   } catch (error) {
     alert(error.message);
     window.location.href = "/rooms/";
   }
+}
+function mouseDown(event) {
+  const chatElement = document.getElementById("chat") as HTMLElement;
+  //console.log("Mouse button pressed", event);
+  if (event.target.id === "chatPosition") {
+    console.log("dragging window");
+    dragging=true;
+    document.body.style.cursor = 'grabbing';
+  }else handleClick(event);
+}
+function mouseMove(event: MouseEvent) {
+  if (!dragging) return;
+
+  const chatElement = document.getElementById("chat") as HTMLElement;
+  const rect = chatElement.getBoundingClientRect();
+  
+  const x = event.clientX;
+  const y = event.clientY;
+  
+  chatElement.style.transform = `translate(${x - rect.width }px, ${y - rect.height}px)`;
+}
+
+function mouseUp(event) {
+  if (!dragging) return;
+
+  const chatElement = document.getElementById("chat") as HTMLElement;
+  const rect = chatElement.getBoundingClientRect();
+  const x = event.clientX;
+  const y = event.clientY;
+
+  console.log("Stopped dragging window");
+  dragging = false;
+  chatElement.style.transform = `translate(${x-rect.width}px, ${y-rect.height}px)`;
+  document.body.style.cursor = 'default';
+
+}
+function changeChatPosition(event) {
+  const x = event.targetX;
+  const y = event.targetY;
+  console.log(x, y);
 }
 async function leaveRoom() {
   try {
