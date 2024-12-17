@@ -1,6 +1,16 @@
 const params = new URLSearchParams(window.location.search);
 const lobby = params.get("id");
 
+let dragging = false;
+let resizing = false;
+
+let startY: number;
+let startX: number;
+let startHeight: number;
+
+let offsetX = 0,offsetY = 0;
+
+
 const socket = io("http://localhost:3000");
 
 socket.on("user-joined", (user) => {
@@ -52,17 +62,21 @@ function deleteUserElement(id) {
 }
 
 function handleClick(event) {
-  if (event.target.tagName === "BUTTON" || event.target.tagName === "INPUT"||dragging)
+  if (
+    event.target.tagName === "BUTTON" ||
+    event.target.tagName === "INPUT" ||
+    dragging
+  )
     return;
 
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
   const arenaElement = document.getElementById("arena") as HTMLElement;
-  const arenaRect = arenaElement.getBoundingClientRect(); // Get arena position in the viewport
+  const arenaRect = arenaElement.getBoundingClientRect(); 
 
-  const relativeX = mouseX - arenaRect.left; // Relative X inside arena
-  const relativeY = mouseY - arenaRect.top; // Relative Y inside arena
+  const relativeX = mouseX - arenaRect.left; 
+  const relativeY = mouseY - arenaRect.top; 
 
   socket.emit("update-position", relativeX, relativeY);
 }
@@ -138,7 +152,6 @@ function submit(event) {
   }
 }
 
-let dragging = false;
 async function renderLobbyElements() {
   try {
     const appElement = document.querySelector("#content");
@@ -148,18 +161,19 @@ async function renderLobbyElements() {
     appElement.innerHTML = `
         <div id="arena">
             <div id="chat">
-            <div id="sizeAdjust">
+             <div id="chat_messageBox">
+                    <input type="text" id="chatInput" placeholder="What is on your mind?"
+                     onkeypress="handleKeypress(event)">
+                </div>
+            
+                <div id="chat_pastMessages">
+                </div>
+               <div id="sizeAdjust">
              <div id="chatSize"> ↕ </div>
              <div id="chatPosition" ">
           ※
              </div>
              </div>
-                <div id="chat_pastMessages">
-                </div>
-                <div id="chat_messageBox">
-                    <input type="text" id="chatInput" placeholder="What is on your mind?"
-                     onkeypress="handleKeypress(event)">
-                </div>
             </div>
         </div>
       <button id="leaveRoom" onclick="leaveRoom()">Leave Room</button>
@@ -174,46 +188,65 @@ async function renderLobbyElements() {
     window.location.href = "/rooms/";
   }
 }
+
 function mouseDown(event) {
-  const chatElement = document.getElementById("chat") as HTMLElement;
-  //console.log("Mouse button pressed", event);
   if (event.target.id === "chatPosition") {
     console.log("dragging window");
-    dragging=true;
-    document.body.style.cursor = 'grabbing';
-  }else handleClick(event);
-}
-function mouseMove(event: MouseEvent) {
-  if (!dragging) return;
+    startX = event.clientX;
+    startY = event.clientY;
 
-  const chatElement = document.getElementById("chat") as HTMLElement;
-  const rect = chatElement.getBoundingClientRect();
-  
-  const x = event.clientX;
-  const y = event.clientY;
-  
-  chatElement.style.transform = `translate(${x - rect.width }px, ${y - rect.height}px)`;
+    dragging = true;
+    document.body.style.cursor = "grabbing";
+  } else if (event.target.id === "chatSize") {
+    const pastChatElement = document.getElementById(
+      "chat_pastMessages"
+    ) as HTMLElement;
+
+    resizing = true;
+    startY = event.clientY;
+
+    startHeight = pastChatElement.offsetHeight;
+    document.body.style.cursor = "ns-resize";
+  } else handleClick(event);
+}
+
+function mouseMove(event: MouseEvent) {
+  if (dragging) {
+    const chatElement = document.getElementById("chat") as HTMLElement;
+    const rect = chatElement.getBoundingClientRect();
+    console.log();
+
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
+
+    chatElement.style.transform = `translate(${offsetX + deltaX}px, ${
+      offsetY + deltaY
+    }px)`;
+  }
+  if (resizing) {
+    const chatElement = document.getElementById(
+      "chat_pastMessages"
+    ) as HTMLElement;
+    const deltaY = event.clientY - startY;
+
+    chatElement.style.height = `${startHeight - deltaY}px`;
+  }
 }
 
 function mouseUp(event) {
-  if (!dragging) return;
+  if (dragging) {
+    const deltaX = event.clientX - startX;
+    const deltaY = event.clientY - startY;
 
-  const chatElement = document.getElementById("chat") as HTMLElement;
-  const rect = chatElement.getBoundingClientRect();
-  const x = event.clientX;
-  const y = event.clientY;
-
-  console.log("Stopped dragging window");
+    offsetX += deltaX;
+    offsetY += deltaY;
+  }
   dragging = false;
-  chatElement.style.transform = `translate(${x-rect.width}px, ${y-rect.height}px)`;
-  document.body.style.cursor = 'default';
+  resizing = false;
 
+  document.body.style.cursor = "default";
 }
-function changeChatPosition(event) {
-  const x = event.targetX;
-  const y = event.targetY;
-  console.log(x, y);
-}
+
 async function leaveRoom() {
   try {
     console.log("aaaa");
