@@ -27,7 +27,6 @@ async function logOut(event) {
 
     if (response.ok) {
         console.log(data.message); 
-        alert('Logout successful');
         window.location.href = '/'; 
     } else {
         console.error('Logout failed:', data.message);
