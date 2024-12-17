@@ -12,7 +12,7 @@ import { onSocketConnect } from "./routes/onSocketConnect";
 // adding to socket import
 declare module "socket.io" {
   interface Socket {
-    user?: { id: string; name: string; roomId: string }; // Define the 'user' property type
+    user?: { id: string; name: string; roomId: string ,position?:{x:number,y:number} }; // Define the 'user' property type
   }
 }
 

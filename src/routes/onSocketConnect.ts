@@ -2,7 +2,6 @@ import { disconnect } from "../controllers/socket/socketDisconnect";
 import { message } from "../controllers/socket/socketMessage";
 import { sendUsers } from "../controllers/socket/socketSendUsers";
 import { updatePosition } from "../controllers/socket/socketUpdatePosition";
-import { io } from "../server";
 
 export function onSocketConnect(socket: any)
 {
