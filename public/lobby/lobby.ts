@@ -1,15 +1,11 @@
 const params = new URLSearchParams(window.location.search);
 const lobby = params.get("id");
 
-let dragging = false;
-let resizing = false;
-
-let startY: number;
-let startX: number;
-let startHeight: number;
-
-let offsetX = 0,offsetY = 0;
-
+let isDragging = false;
+let isResizing = false;
+let dragStartPos = { x: 0, y: 0 };
+let chatOffset = { x: 0, y: 0 };
+let startHeight = 0;
 
 const socket = io("http://localhost:3000");
 
@@ -62,21 +58,17 @@ function deleteUserElement(id) {
 }
 
 function handleClick(event) {
-  if (
-    event.target.tagName === "BUTTON" ||
-    event.target.tagName === "INPUT" ||
-    dragging
-  )
+  if (event.target.tagName === "BUTTON" || event.target.tagName === "INPUT")
     return;
 
   const mouseX = event.clientX;
   const mouseY = event.clientY;
 
   const arenaElement = document.getElementById("arena") as HTMLElement;
-  const arenaRect = arenaElement.getBoundingClientRect(); 
+  const arenaRect = arenaElement.getBoundingClientRect();
 
-  const relativeX = mouseX - arenaRect.left; 
-  const relativeY = mouseY - arenaRect.top; 
+  const relativeX = mouseX - arenaRect.left;
+  const relativeY = mouseY - arenaRect.top;
 
   socket.emit("update-position", relativeX, relativeY);
 }
@@ -191,61 +183,52 @@ async function renderLobbyElements() {
 
 function mouseDown(event) {
   if (event.target.id === "chatPosition") {
-    startX = event.clientX;
-    startY = event.clientY;
-
-    dragging = true;
+    isDragging = true;
+    dragStartPos.x = event.clientX;
+    dragStartPos.y = event.clientY;
     document.body.style.cursor = "grabbing";
   } else if (event.target.id === "chatSize") {
-    const pastChatElement = document.getElementById(
+    isResizing = true;
+    const chatLogElement = document.getElementById(
       "chat_pastMessages"
     ) as HTMLElement;
-
-    resizing = true;
-    startY = event.clientY;
-
-    startHeight = pastChatElement.offsetHeight;
+    startHeight = chatLogElement.offsetHeight;
+    dragStartPos.y = event.clientY;
     document.body.style.cursor = "ns-resize";
-  } else handleClick(event);
+  } else {
+    handleClick(event);
+  }
 }
 
-function mouseMove(event: MouseEvent) {
-  if (dragging) {
-    const chatElement = document.getElementById("chat") as HTMLElement;
-    const rect = chatElement.getBoundingClientRect();
-    console.log();
+function mouseMove(event) {
+  const chatElement = document.getElementById("chat") as HTMLElement;
 
-    const deltaX = event.clientX - startX;
-    const deltaY = event.clientY - startY;
-
-    chatElement.style.transform = `translate(${offsetX + deltaX}px, ${
-      offsetY + deltaY
-    }px)`;
+  if (isDragging) {
+    const moveX = event.clientX - dragStartPos.x + chatOffset.x;
+    const moveY = event.clientY - dragStartPos.y + chatOffset.y;
+    chatElement.style.transform = `translate(${moveX}px, ${moveY}px)`;
   }
-  if (resizing) {
-    const chatElement = document.getElementById(
+
+  if (isResizing) {
+    const chatLogElement = document.getElementById(
       "chat_pastMessages"
     ) as HTMLElement;
-    const deltaY = event.clientY - startY;
-
-    chatElement.style.height = `${startHeight - deltaY}px`;
+    const deltaY = event.clientY - dragStartPos.y;
+    const newHeight = startHeight - deltaY;
+    chatLogElement.style.height = `${newHeight}px`;
   }
 }
 
 function mouseUp(event) {
-  if (dragging) {
-    const deltaX = event.clientX - startX;
-    const deltaY = event.clientY - startY;
-
-    offsetX += deltaX;
-    offsetY += deltaY;
+  if (isDragging) {
+    chatOffset.x += event.clientX - dragStartPos.x;
+    chatOffset.y += event.clientY - dragStartPos.y;
   }
-  dragging = false;
-  resizing = false;
 
+  isDragging = false;
+  isResizing = false;
   document.body.style.cursor = "default";
 }
-
 async function leaveRoom() {
   try {
     console.log("aaaa");
