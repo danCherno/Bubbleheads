@@ -29,29 +29,50 @@ socket.on("show-users", (users) => {
 });
 
 socket.on("change-position", (targetX, targetY, id) => {
+  moveAvatar(targetX, targetY, id);
+});
+
+function moveAvatar(targetX, targetY, id) {
   const avatarElement = document.getElementById(id) as HTMLElement;
   if (avatarElement) {
-    const rect = avatarElement.getBoundingClientRect();
+    const parentElement = avatarElement.offsetParent as HTMLElement;
+    if (!parentElement) return;
 
+    const parentRect = parentElement.getBoundingClientRect();
+
+    const targetXInPixels = (targetX / 100) * parentRect.width;
+    const targetYInPixels = (targetY / 100) * parentRect.height;
+
+    const currentTransform = window.getComputedStyle(avatarElement).transform;
+    let currentX = 0;
+    let currentY = 0;
+
+    if (currentTransform !== "none") {
+      const matrix = currentTransform.match(/matrix\(([^)]+)\)/);
+      if (matrix) {
+        const values = matrix[1].split(", ");
+        currentX = parseFloat(values[4]);
+        currentY = parseFloat(values[5]);
+      }
+    }
+
+    const deltaX = targetXInPixels - currentX;
+    const deltaY = targetYInPixels - currentY;
+
+    const rect = avatarElement.getBoundingClientRect();
     const avatarWCenter = rect.width * 0.5;
     const avatarHCenter = rect.height * 0.7;
-    const currentX = rect.left;
-    const currentY = rect.top;
-
-    const deltaX = targetX - currentX;
-    const deltaY = targetY - currentY;
     const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+
     const speed = 500;
     const duration = distance / speed;
 
     avatarElement.style.transition = `transform ${duration}s linear`;
-
-    avatarElement.style.transform = `translate(${targetX - avatarWCenter}px, ${
-      targetY - avatarHCenter
-    }px)`;
+    avatarElement.style.transform = `translate(${
+      targetXInPixels - avatarWCenter
+    }px, ${targetYInPixels - avatarHCenter}px)`;
   }
-});
-
+}
 function deleteUserElement(id) {
   const userElement = document.getElementById(id) as HTMLElement;
   userElement.remove();
@@ -61,15 +82,16 @@ function handleClick(event) {
   if (event.target.tagName === "BUTTON" || event.target.tagName === "INPUT")
     return;
 
-  const mouseX = event.clientX;
-  const mouseY = event.clientY;
-
   const arenaElement = document.getElementById("arena") as HTMLElement;
   const arenaRect = arenaElement.getBoundingClientRect();
 
-  const relativeX = mouseX - arenaRect.left;
-  const relativeY = mouseY - arenaRect.top;
+  const clickX = event.clientX - arenaRect.left;
+  const clickY = event.clientY - arenaRect.top;
 
+  const relativeX = ((clickX / arenaRect.width) * 100).toFixed();
+  const relativeY = ((clickY / arenaRect.height) * 100).toFixed();
+
+  console.log(relativeX, relativeY);
   socket.emit("update-position", relativeX, relativeY);
 }
 
@@ -93,15 +115,19 @@ function renderUser(user) {
   userElement.appendChild(userNameElement);
 
   arenaElement.appendChild(userElement);
+  
   if (user.position) {
     const { x, y } = user.position;
-    const rect = userElement.getBoundingClientRect();
 
+    const parentRect = arenaElement.getBoundingClientRect();
+    const rect = userElement.getBoundingClientRect();
     const avatarWCenter = rect.width * 0.5;
     const avatarHCenter = rect.height * 0.7;
 
-    userElement.style.transform = `translate(${x - avatarWCenter}px, ${
-      y - avatarHCenter
+    const targetX = (x / 100) * parentRect.width;
+    const targetY = (y / 100) * parentRect.height;
+    userElement.style.transform = `translate(${targetX - avatarWCenter}px, ${
+      targetY - avatarHCenter
     }px)`;
   }
 }
