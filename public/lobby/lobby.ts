@@ -115,7 +115,7 @@ function renderUser(user) {
   userElement.appendChild(userNameElement);
 
   arenaElement.appendChild(userElement);
-  
+
   if (user.position) {
     const { x, y } = user.position;
 
@@ -195,6 +195,8 @@ async function renderLobbyElements() {
             </div>
         </div>
       <button id="leaveRoom" onclick="leaveRoom()">Leave Room</button>
+      <button hidden id="resetChatPos" onclick="resetChatPos(event)">◱</button>
+
     `;
 
     socket.emit("send-users");
@@ -207,6 +209,12 @@ async function renderLobbyElements() {
   }
 }
 
+function resetChatPos(event) {
+  event.target.style.display="none"
+  const chatElement = document.getElementById("chat") as HTMLElement;
+  chatElement.style.transform = `translate(0px, 0px)`;
+  chatOffset = { x: 0, y: 0 };
+}
 function mouseDown(event) {
   if (event.target.id === "chatPosition") {
     isDragging = true;
@@ -244,12 +252,34 @@ function mouseMove(event) {
     chatLogElement.style.height = `${newHeight}px`;
   }
 }
+function isOutOfBounds(): boolean {
+  const chatPositionElement = document.getElementById(
+    "chatPosition"
+  ) as HTMLElement;
+  const arenaElement = document.getElementById("arena") as HTMLElement;
+  const arenaRect = arenaElement.getBoundingClientRect();
+  const chatPosRect = chatPositionElement.getBoundingClientRect();
 
+  if (
+    chatPosRect.top < 0 ||
+    chatPosRect.left < 0 ||
+    chatPosRect.left > arenaRect.width ||
+    chatPosRect.top > arenaRect.height
+  )
+    return true;
+
+  return false;
+}
 function mouseUp(event) {
   if (isDragging) {
     chatOffset.x += event.clientX - dragStartPos.x;
     chatOffset.y += event.clientY - dragStartPos.y;
   }
+  const arenaElement = document.getElementById("resetChatPos") as HTMLElement;
+  const OutOfBounds = isOutOfBounds();
+  if (OutOfBounds) {
+    arenaElement.style.display = "block";
+  } else arenaElement.style.display = "none";
 
   isDragging = false;
   isResizing = false;

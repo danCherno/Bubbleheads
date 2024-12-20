@@ -60,6 +60,18 @@ body {
     }
   }
 }
+#resetChatPos
+{
+  position: absolute;
+  width: 2vw;
+  height: 2vw;
+  bottom: 0;
+  right: 0;
+  margin-right: 13vw;
+  margin-bottom: 3.5vw;
+  z-index: 9999;
+
+}
 .agent {
   position: absolute;
   width: 5vh;
