@@ -115,7 +115,18 @@ function renderUser(user) {
   userElement.appendChild(userNameElement);
 
   arenaElement.appendChild(userElement);
+  if (user.icon) {
+    // Convert binary data to base64 string and create Data URL
+    const base64String = btoa(
+      String.fromCharCode(...new Uint8Array(user.icon.data.data))
+    );
+    const imageSrc = `data:${user.icon.contentType};base64,${base64String}`;
 
+    const iconElement = document.createElement("img");
+    iconElement.src = imageSrc;
+    iconElement.classList.add("icon");
+    userElement.appendChild(iconElement);
+  }
   if (user.position) {
     const { x, y } = user.position;
 
@@ -210,7 +221,7 @@ async function renderLobbyElements() {
 }
 
 function resetChatPos(event) {
-  event.target.style.display="none"
+  event.target.style.display = "none";
   const chatElement = document.getElementById("chat") as HTMLElement;
   chatElement.style.transform = `translate(0px, 0px)`;
   chatOffset = { x: 0, y: 0 };

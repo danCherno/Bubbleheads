@@ -8,13 +8,17 @@ import { Server } from "socket.io";
 import http from "http";
 import { initSocket } from "./controllers/socket/initSocket";
 import { onSocketConnect } from "./routes/onSocketConnect";
+import multer from 'multer';
 
 // adding to socket import
 declare module "socket.io" {
   interface Socket {
-    user?: { id: string; name: string; roomId: string ,position?:{x:number,y:number} }; // Define the 'user' property type
+    user?: { id: string; name: string; roomId: string ,position?:{x:number,y:number} ,icon?:String}; // Define the 'user' property type
   }
 }
+
+const storage = multer.memoryStorage(); // Store the file in memory as a buffer
+const upload = multer({ storage });
 
 // server's variables initialization
 const app = express();

@@ -16,27 +16,62 @@ function renderLogOutButton() {
   logOutBtn.addEventListener(`click`, logOut);
   document.body.appendChild(logOutBtn);
 }
+
+
+async function uploadImage(event) {
+  try {
+  event.preventDefault(); 
+
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement; // Reference the file input
+  const formData = new FormData();
+ 
+  if (!fileInput.files || fileInput.files.length === 0) {
+    console.error('No file selected!');
+    return;
+  }
+
+  formData.append('image', fileInput.files[0]);
+
+ 
+    const response = await fetch('/api/users/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await response.text();
+    if(response.ok)
+    {
+      const form = document.getElementById("uploadForm") as HTMLElement;
+     
+   
+      form.style.animation = "retract 1s ease-out forwards";  
+          }
+    console.log(result);
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+}
+  
 async function logOut(event) {
   try {
-    const response = await fetch('/api/users/logout-user', {
-        method: 'POST', 
-        credentials: 'include' 
+    const response = await fetch("/api/users/logout-user", {
+      method: "POST",
+      credentials: "include",
     });
 
     const data = await response.json();
 
     if (response.ok) {
-        console.log(data.message); 
-        window.location.href = '/'; 
+      console.log(data.message);
+      window.location.href = "/";
     } else {
-        console.error('Logout failed:', data.message);
-        alert('Logout failed: ' + data.message);
+      console.error("Logout failed:", data.message);
+      alert("Logout failed: " + data.message);
     }
-} catch (error) {
-    console.error('Error during logout:', error);
-    alert('An error occurred while logging out.');
-}
-
+  } catch (error) {
+    console.error("Error during logout:", error);
+    alert("An error occurred while logging out.");
+  }
 }
 function addRoomRender() {
   const addRoomElement = document.getElementById("addRoom") as HTMLElement;
