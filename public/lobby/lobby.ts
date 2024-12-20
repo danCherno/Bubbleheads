@@ -64,13 +64,17 @@ function moveAvatar(targetX, targetY, id) {
     const avatarHCenter = rect.height * 0.7;
     const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
 
-    const speed = 500;
+    const speed = 250;
     const duration = distance / speed;
-
+   
+    let scaleFactor = .1 + (targetY / 100) * 1.6; 
+    if(scaleFactor>2)
+    {scaleFactor=2}
     avatarElement.style.transition = `transform ${duration}s linear`;
-    avatarElement.style.transform = `translate(${
+    avatarElement.style.scale=""
+    avatarElement.style.transform = `  translate(${
       targetXInPixels - avatarWCenter
-    }px, ${targetYInPixels - avatarHCenter}px)`;
+    }px, ${targetYInPixels - avatarHCenter}px) scale(${scaleFactor})`;
   }
 }
 function deleteUserElement(id) {
@@ -204,6 +208,11 @@ async function renderLobbyElements() {
              </div>
              </div>
             </div>
+                    <div id="floor"></div>
+                    <div id="wallRight"></div>
+                    <div id="wallForward"></div>
+                    <div id="wallLeft"></div>
+
         </div>
       <button id="leaveRoom" onclick="leaveRoom()">Leave Room</button>
       <button hidden id="resetChatPos" onclick="resetChatPos(event)">◱</button>

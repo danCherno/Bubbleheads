@@ -10,28 +10,91 @@ body {
   height: 100vh;
   #arena {
     overflow: hidden;
-
+    transform-style: preserve-3d;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(
-      to bottom,
-      #87cefa 35%,
-      #e7f29d 40%,
-      #e7f29d 60%,
-      #d1b08c 100%
-    );
+
+    #floor {
+      z-index: 0;
+      position: absolute;
+
+      transform: perspective(30em) rotateX(75deg);
+      transform-style: preserve-3d;
+      width: 100%;
+      height: 100%;
+      background-image: linear-gradient(
+        to bottom,
+        #87cefa 35%,
+        #e7f29d 40%,
+        #e7f29d 60%,
+        #d1b08c 100%
+      );
+    }
+    #wallRight {
+      z-index: 1;
+      transform: perspective(30em) rotateY(-140deg) translateZ(-50vh);
+      transform-style: preserve-3d;
+      position: absolute;
+      left: 0;
+      width: 70%;
+      height: 100%;
+      background-image: linear-gradient(
+        to bottom,
+        #87cefa25 25%,    // Sky color
+        #8ae2fa 40%,    // Water color
+        #e7f29d 50%,    // Sand color (light yellow)
+        #e7c25c76 70%,    // Slightly darker yellow for sand
+        #d1b08c2d 100%    // Darker yellow (deep sand color)
+  
+      );
+    }
+    
+    #wallForward {
+      position: absolute;
+
+      transform: translateZ(-50vh);
+      transform-style: preserve-3d;
+      width: 100%;
+      height: 45%;
+      background-image: linear-gradient(
+        to bottom,
+        #87cefa 10%,    
+        #8ae2fa 30%,    
+        #4ba3c7 60%,   
+        #2e76a3 100%    
+      );
+    }
+    
+    #wallLeft {
+      transform: perspective(30em) rotateY(90deg) translateZ(-50vh);
+      transform-style: preserve-3d;
+      width: 60%;
+      height: 100%;
+      background-image: linear-gradient(
+        to bottom,
+        #87cefa25 25%,    // Sky color
+        #8ae2fa 40%,    // Water color
+        #e7f29d 50%,    // Sand color (light yellow)
+        #e7c25c76 70%,    // Slightly darker yellow for sand
+        #d1b08c2d 100%    // Darker yellow (deep sand color)
+  
+      );
+    }
   }
 }
 
 #chat {
   position: absolute;
   width: 30vw;
+  transform-style: preserve-3d;
+
   border: 1px solid black;
   left: 0;
   bottom: 0;
   z-index: 9999;
   display: flex;
   flex-direction: column-reverse;
+
   &_pastMessages {
     overflow-y: auto;
     width: 100%;
@@ -68,10 +131,10 @@ body {
   right: 13vw;
   z-index: 9999;
   border: 1px solid black;
-  border-radius: 5px; 
+  border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.589);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease; 
+  transition: all 0.3s ease;
 }
 
 #resetChatPos:hover {
@@ -79,13 +142,14 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
+
 .agent {
   position: absolute;
+  z-index: 2;
   width: 5vh;
   height: 10vw;
   top: 0;
   left: 0;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -179,11 +243,10 @@ body {
     font-size: 1.2rem;
   }
 }
-.icon
-{
+.icon {
   width: 3vw;
   height: 3vw;
   border-radius: 50%;
   position: absolute;
-  top:0
+  top: 0;
 }
