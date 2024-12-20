@@ -187,18 +187,33 @@ async function handleEnterRoom(id) {
       },
     });
 
-    const password = prompt("Please enter the room password");
-    const response = await fetch("/api/rooms/enter-room", {
+    const testResponse = await fetch("/api/rooms/enter-room", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id, password }),
+      body: JSON.stringify({ id }),
     });
+    
+    const { isProtected } = await testResponse.json();
 
-    if (!response.ok) {
-      alert("Incorrect password");
-      return;
+    if (isProtected)
+    {
+      const password = prompt("Please enter the room password");
+      const passwordResponse = await fetch("/api/rooms/enter-protected-room", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, password }),
+      });
+
+      const { auth } = await passwordResponse.json();
+
+      if (!auth) {
+        alert("Incorrect password");
+        return;
+      }
     }
 
     window.location.href = `/lobby/?id=${id}`;
