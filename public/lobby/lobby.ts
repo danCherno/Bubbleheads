@@ -212,8 +212,11 @@ async function renderLobbyElements() {
 function resetChatPos(event) {
   event.target.style.display="none"
   const chatElement = document.getElementById("chat") as HTMLElement;
+  const chatLogElement = document.getElementById("chat_pastMessages") as HTMLElement;
+
   chatElement.style.transform = `translate(0px, 0px)`;
   chatOffset = { x: 0, y: 0 };
+  chatLogElement.style.height= "300px"
 }
 function mouseDown(event) {
   if (event.target.id === "chatPosition") {
