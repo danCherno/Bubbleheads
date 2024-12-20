@@ -158,19 +158,24 @@ body {
   align-items: center;
   position: absolute;
   top: 0;
-  height: 10%;
+  height: 15%;
   padding: 2vw;
   background-color: #2276ca;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  
+  justify-content: space-evenly;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  h1{
+    margin: 0 auto;
+  }  
   .file-label {
     background-color: #4682b4;
     color: white;
-    padding: 15px;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: bold;
     border-radius: 5px;
+    margin-top: 2%;
+    padding: 4%;
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-align: center;
@@ -189,18 +194,18 @@ body {
 @keyframes retract{
 
   20%{
-    height: 15%;
+    height: 20%;
   }
   25%{
     top: 0;
 
   }
   40%{
-    height: 10%;
+    height: 15%;
    
   }
   
   100%{
-    top: -15%;
+    top: -20%;
   }
 }
