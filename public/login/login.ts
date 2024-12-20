@@ -1,31 +1,32 @@
 document.addEventListener("DOMContentLoaded", () => {
-  switchForms();
+  onSwitchToLogin();
   setupFormListeners();
 });
 
-function switchForms() {
-  try {
-    const loginForm = document.getElementById("loginForm") as HTMLElement;
-    const registerForm = document.getElementById("registerForm") as HTMLElement;
-    const registerBtn = document.getElementById("registerBtn") as HTMLButtonElement;
-    const backToLoginBtn = document.getElementById("backToLogin") as HTMLButtonElement;
+function onSwitchToLogin()
+{
+  const loginForm = document.getElementById("loginForm") as HTMLElement;
+  const registerForm = document.getElementById("registerForm") as HTMLElement;
+  const backToLoginForm = document.getElementById("backToLoginForm") as HTMLElement;
+  const backToRegisterForm = document.getElementById("backToRegisterForm") as HTMLElement;
 
-    if (!registerBtn || !backToLoginBtn || !loginForm || !registerForm) {
-      throw new Error("Missing one or more elements.");
-    }
+  loginForm.style.display = "block";
+  backToRegisterForm.style.display = "block";
+  backToLoginForm.style.display = "none";
+  registerForm.style.display = "none";
+}
 
-    registerBtn.addEventListener("click", () => {
-      loginForm.style.display = "none"; 
-      registerForm.style.display = "block";
-    });
+function onSwitchToRegister()
+{
+  const loginForm = document.getElementById("loginForm") as HTMLElement;
+  const registerForm = document.getElementById("registerForm") as HTMLElement;
+  const backToLoginForm = document.getElementById("backToLoginForm") as HTMLElement;
+  const backToRegisterForm = document.getElementById("backToRegisterForm") as HTMLElement;
 
-    backToLoginBtn.addEventListener("click", () => {
-      registerForm.style.display = "none";
-      loginForm.style.display = "block";
-    });
-  } catch (error) {
-    console.error("Error switching forms:", error);
-  }
+  loginForm.style.display = "none";
+  backToRegisterForm.style.display = "none";
+  backToLoginForm.style.display = "block";
+  registerForm.style.display = "block";
 }
 
 function setupFormListeners() {
