@@ -5,13 +5,13 @@ import { secretKey } from "../../server";
 
 export async function addRoom(req: any, res: any) {
   try {
-    const { name } = req.body;
+    const { name, password } = req.body;
     const { user } = req.cookies;
 
     const decryptedUser= jwt.decode(user,secretKey);
     if(!decryptedUser) throw new Error("error decoding user")
 
-    const newRoom =await LobbyModel.create({name: name, owner: decryptedUser.email});
+    const newRoom =await LobbyModel.create({name: name, owner: decryptedUser.email, password});
     res.json({message:`success! room called ${name} was created`})
   } catch (error) {
     console.error("Error during room creation:", error);

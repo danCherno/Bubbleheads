@@ -41,22 +41,23 @@ function addRoomRender() {
   const addRoomElement = document.getElementById("addRoom") as HTMLElement;
   addRoomElement.innerHTML = `<h1>Add a Room</h1>
   <input type="text" id="roomName" placeholder="write the name to the room">
+  <input type="password" id="password" placeholder="room password">
   <input type="submit" onclick="addRoom(event)">`;
 }
 
 async function addRoom() {
   try {
-    const userInputElement = document.getElementById(
-      "roomName"
-    ) as HTMLInputElement;
+    const userInputElement = document.getElementById("roomName") as HTMLInputElement;
+    const passwordInputElement = document.getElementById("password") as HTMLInputElement;
     const name = userInputElement.value;
+    const password = passwordInputElement.value;
 
     const response = await fetch("/api/rooms/add-room", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, password }),
     });
 
     const data = await response.json();
@@ -185,17 +186,23 @@ async function handleEnterRoom(id) {
         "Content-Type": "application/json",
       },
     });
+
+    const password = prompt("Please enter the room password");
     const response = await fetch("/api/rooms/enter-room", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, password }),
     });
 
-    if (response.ok) {
-      window.location.href = `/lobby/?id=${id}`;
+    if (!response.ok) {
+      alert("Incorrect password");
+      return;
     }
+
+    window.location.href = `/lobby/?id=${id}`;
+
   } catch (error) {
     console.error(error);
   }

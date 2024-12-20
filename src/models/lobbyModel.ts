@@ -7,8 +7,11 @@ export const LobbySchema = new Schema({
     },
     owner:{
         type: String,
-        defaultValue: "admin",
-        ref: "User"
+        defaultValue: "admin"
+    },
+    password:{
+        type: String,
+        required: false
     }
 })
 
