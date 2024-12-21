@@ -62,8 +62,7 @@ async function logOut(event) {
     const data = await response.json();
 
     if (response.ok) {
-      console.log(data.message);
-      window.location.href = "/";
+        window.location.href = '/'; 
     } else {
       console.error("Logout failed:", data.message);
       alert("Logout failed: " + data.message);
@@ -77,27 +76,29 @@ function addRoomRender() {
   const addRoomElement = document.getElementById("addRoom") as HTMLElement;
   addRoomElement.innerHTML = `<h1>Add a Room</h1>
   <input type="text" id="roomName" placeholder="write the name to the room">
+  <input type="password" id="password" placeholder="room password">
   <input type="submit" onclick="addRoom(event)">`;
 }
 
 async function addRoom() {
   try {
-    const userInputElement = document.getElementById(
-      "roomName"
-    ) as HTMLInputElement;
+    const userInputElement = document.getElementById("roomName") as HTMLInputElement;
+    const passwordInputElement = document.getElementById("password") as HTMLInputElement;
     const name = userInputElement.value;
-    console.log("room name :", name);
+    const password = passwordInputElement.value;
 
     const response = await fetch("/api/rooms/add-room", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, password }),
     });
 
     const data = await response.json();
-    console.log(data);
+
+    window.location.href = '/rooms';
+
   } catch (error) {
     console.error("error:", error);
   }
@@ -108,15 +109,16 @@ async function getRooms() {
     const response = await fetch("/api/rooms/get-room");
     const data = await response.json();
     const rooms = data.rooms;
+    const email = data.email;
     if (!rooms) throw new Error("something went wrong or no rooms");
     rooms.forEach((room) => {
-      getPopulation(room);
+      getPopulation(room, email);
     });
   } catch (error) {
     console.error("and error has occurred :", error);
   }
 }
-async function getPopulation(room) {
+async function getPopulation(room, email) {
   try {
     let id = room._id;
     const response = await fetch("/api/rooms/get-room-population", {
@@ -132,7 +134,6 @@ async function getPopulation(room) {
     if (!populationNumber && populationNumber != 0)
       throw new Error("an error has occurred");
     let roomsSize = "-1";
-    console.log(populationNumber);
     switch (true) {
       case populationNumber === 0:
         roomsSize = "empty";
@@ -149,24 +150,65 @@ async function getPopulation(room) {
       default:
         roomsSize = "full";
     }
-    renderRoom(room, roomsSize);
+    renderRoom(room, roomsSize, email);
   } catch (error) {
     console.error(error);
   }
 }
 
-function renderRoom(room, population) {
+async function deleteRoom(room)
+{
   try {
-    const roomsContainElement = document.getElementById(
-      "roomsContainer"
-    ) as HTMLElement;
-    if (!roomsContainElement)
-      throw new Error("no room container element found");
+    const response = await fetch(`/api/rooms/delete-room/${room}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
 
-    roomsContainElement.innerHTML += ` <div class="room" id="${room._id}" onclick="handleEnterRoom('${room._id}')">
-      <h1 class="room_name">${room.name}</h1>
-      <div class="room_population ${population}"></div>
-    </div>`;
+    if (!response.ok) {
+      throw new Error(`Failed to delete: ${response.statusText}`);
+    }
+
+    window.location.href = '/rooms';
+  }
+  catch (error) {
+    console.error("error deleting room :", error);
+  }
+}
+function renderRoom(room, population, email) {
+  try {
+    const globalRoomsContainElement = document.getElementById("globalRoomsContainer") as HTMLElement;
+    const personalRoomsContainElement = document.getElementById("personalRoomsContainer") as HTMLElement;
+    if (!globalRoomsContainElement || !personalRoomsContainElement) throw new Error("room container element not found");
+
+
+    if (room.owner && room.owner !== "admin")
+    {
+      if (email === room.owner)
+      {
+        personalRoomsContainElement.innerHTML += `
+          <div class="room" id="${room._id}">
+            <h1 class="room_name" onclick="handleEnterRoom('${room._id}')">${room.name}</h1>
+            <div class="room_population ${population}"></div>
+            <div class="room_delete" onclick="deleteRoom('${room._id}')"> X </div>
+          </div>`;
+      }
+      else
+      {
+        personalRoomsContainElement.innerHTML += `
+          <div class="room" id="${room._id}" onclick="handleEnterRoom('${room._id}')">
+          <h1 class="room_name">${room.name}</h1>
+          <div class="room_population ${population}"></div>
+          </div>`;
+      }
+    }
+    else
+    {
+      globalRoomsContainElement.innerHTML += ` <div class="room" id="${room._id}" onclick="handleEnterRoom('${room._id}')">
+        <h1 class="room_name">${room.name}</h1>
+        <div class="room_population ${population}"></div>
+      </div>`;
+    }
+
   } catch (error) {
     console.error("error rendering rooms: ", error);
   }
@@ -179,18 +221,38 @@ async function handleEnterRoom(id) {
         "Content-Type": "application/json",
       },
     });
-    const response = await fetch("/api/rooms/enter-room", {
+
+    const testResponse = await fetch("/api/rooms/enter-room", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id }),
     });
+    
+    const { isProtected } = await testResponse.json();
 
-    console.log(response);
-    if (response.ok) {
-      window.location.href = `/lobby/?id=${id}`;
+    if (isProtected)
+    {
+      const password = prompt("Please enter the room password");
+      const passwordResponse = await fetch("/api/rooms/enter-protected-room", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, password }),
+      });
+
+      const { auth } = await passwordResponse.json();
+
+      if (!auth) {
+        alert("Incorrect password");
+        return;
+      }
     }
+
+    window.location.href = `/lobby/?id=${id}`;
+
   } catch (error) {
     console.error(error);
   }
