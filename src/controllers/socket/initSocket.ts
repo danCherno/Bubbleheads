@@ -21,7 +21,7 @@ export async function initSocket(socket: any, next: (error?: Error) => void) {
   const userId = jwt.decode(token, secretKey).userId;
 
   const room = await LobbyUsersModel.findOne({ user: userId })
-    .populate("user", "username email")
+    .populate("user", "username email icon")
     .populate("lobby", "name")
     .exec();
   if (!room) throw new Error("user not in a room");
@@ -30,9 +30,10 @@ export async function initSocket(socket: any, next: (error?: Error) => void) {
   if (!user) throw new Error("failed populating user");
 
   const name = room.user.username;
+  const icon = room.user.icon;
   const lobbyId = room.lobby._id.toString();
 
-  socket.user = { id: userId, name: name, roomId: lobbyId };
+  socket.user = { id: userId, name: name, roomId: lobbyId ,icon:icon};
   next();
  } catch (error:any) {
     console.error(error); 

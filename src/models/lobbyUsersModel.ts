@@ -2,6 +2,7 @@ import { Schema, model } from "mongoose";
 interface IUser {
   username: string;
   email: string;
+  icon?: string; 
 }
 
 // Define the Lobby type
