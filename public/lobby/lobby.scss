@@ -32,7 +32,7 @@ body {
     }
     #wallRight {
       z-index: 1;
-      transform: perspective(30em) rotateY(-140deg) translateZ(-50vh);
+      transform: perspective(30em) rotateY(-30deg) translateZ(-50vh)translateX(140vh);
       transform-style: preserve-3d;
       position: absolute;
       left: 0;
@@ -40,11 +40,14 @@ body {
       height: 100%;
       background-image: linear-gradient(
         to bottom,
-        #87cefa25 25%,    // Sky color
-        #8ae2fa 40%,    // Water color
-        #e7f29d 50%,    // Sand color (light yellow)
-        #e7c25c76 70%,    // Slightly darker yellow for sand
-        #d1b08c2d 100%    // Darker yellow (deep sand color)
+        #87cefa 10%, 
+        #4ba3c7 25%,  
+        #2e76a3 44%,   
+        #87cefa 45%,   
+        #87cefa 47%,   
+        #e7f29d 47%,  
+        #e7c25c76 70%,   
+        #d1b08c2d 100%   
   
       );
     }
