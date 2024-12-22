@@ -32,6 +32,13 @@ socket.on("change-position", (targetX, targetY, id) => {
   moveAvatar(targetX, targetY, id);
 });
 
+document.body.style.opacity = "0";
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    document.body.style.opacity = "1";
+  }, 300)
+});
+
 function moveAvatar(targetX, targetY, id) {
   const avatarElement = document.getElementById(id) as HTMLElement;
   if (avatarElement) {
@@ -314,7 +321,12 @@ async function leaveRoom() {
       console.log(data.message);
       socket.disconnect();
 
-      window.location.href = "/rooms";
+      document.body.style.opacity = "0";
+      setTimeout(() => {
+        window.location.href = "/rooms";
+        document.body.style.opacity = "1";
+      }, 300)
+      
     } else {
       console.error("Error:", data.message);
     }

@@ -9,8 +9,8 @@
   <script src="./login/dist/login.js" defer></script>
 </head>
 <body>
-  <div class="form-container">
-    <div id="loginForm" class="form-box login">
+  <div id="form-container">
+    <div id="loginForm" class="form box login">
       <h2 class="login__title">Login</h2>
       <form id="loginForm">
         <label for="email">Email Address</label>
@@ -32,19 +32,19 @@
       </form>
     </div>
 
-    <div class="form-box" id="backToRegisterForm">
+    <div class="switch box" id="backToRegisterForm">
       <h2 class="register__title">Welcome!</h2>
       <p class="register__description">Don't have an account? Register one!</p>
       <button id="registerBtn" class="btn register-btn" onclick="onSwitchToRegister()">Register an Account</button>
     </div>
 
-    <div class="form-box" id="backToLoginForm">
+    <div class="switch box" id="backToLoginForm">
       <h2 class="register__title">Welcome!</h2>
       <p class="register__description">allready registered? Sign in!</p>
       <button id="registerBtn" class="btn register-btn" onclick="onSwitchToLogin()">Login to an Account</button>
     </div>
 
-    <div class="form-box registerform" id="registerForm" style="display: none;">
+    <div class="form box registerform" id="registerForm" style="display: none;">
       <h2 class="registerform__title">Register</h2>
       <form id="registerForm">
         <label for="username">Username</label>

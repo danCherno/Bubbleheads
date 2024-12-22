@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Modak&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
 
 body {
-  font-family: "Roboto", serif;
+  font-family: "Patrick Hand", serif;
   font-weight: 400;
-  background-color: #f8f9fa;
+  font-style: normal;
+  background-color: lavender;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,30 +12,36 @@ body {
   margin: 0;
 }
 
-.form-container {
+#form-container {
   display: flex;
   flex-wrap: wrap;
   width: 90%;
   max-width: 800px;
-  background-color: #fff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
+  transition: opacity 0.3s ease;
 
-  .form-box {
+
+  .form{
+    background-color: LemonChiffon;
+  }
+  .switch{
+    background-color: Moccasin;
+  }
+
+  .box {
     flex: 1 1 50%;
     padding: 2rem;
     box-sizing: border-box;
+
     &.registerform{
-      background-color: white;
-    }
-    &.login {
-      background-color: #fff;
+      background-color: LemonChiffon;
     }
 
-    &.regi  ster {
-      background-color: #4666C1;
-      color: #fff;
+    &.register {
+      background-color: maroon;
+      color: Moccasin;
       text-align: center;
     }
 
@@ -76,25 +83,25 @@ body {
       font-weight: bold;
       text-align: center;
       color: #fff;
-      background-color: #4666C1;
+      background-color: maroon;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #36519B;
+        background-color: brown;
       }
 
       &.register-btn {
         background-color: #fff;
-        color: #4666C1;
+        color: maroon;
         position: relative;
         top: 10vh;
       }
       &.registerform-btn {
         background-color: #fff;
-        color: #4666C1;
+        color: maroon;
         position: relative;
         top: 1vh;
         z-index: 1;

@@ -4,11 +4,16 @@ interface Room {
   population: number;
 }
 
+document.body.style.opacity = "0";
 function main() {
+  setTimeout(() => {
+    document.body.style.opacity = "1";
+  }, 300)
   getRooms();
   addRoomRender();
   renderLogOutButton();
 }
+
 function renderLogOutButton() {
   const logOutBtn = document.createElement("button") as HTMLButtonElement;
   logOutBtn.innerText = "Log Out";
@@ -62,7 +67,12 @@ async function logOut(event) {
     const data = await response.json();
 
     if (response.ok) {
+      document.body.style.opacity = "0";
+      setTimeout(() => {        
         window.location.href = '/'; 
+        document.body.style.opacity = "1";
+      }, 300)
+
     } else {
       console.error("Logout failed:", data.message);
       alert("Logout failed: " + data.message);
@@ -97,7 +107,12 @@ async function addRoom() {
 
     const data = await response.json();
 
-    window.location.href = '/rooms';
+    document.body.style.opacity = "0";
+    setTimeout(() => {
+      window.location.href = '/rooms';
+      document.body.style.opacity = "1";
+    }, 300)
+    
 
   } catch (error) {
     console.error("error:", error);
@@ -168,7 +183,12 @@ async function deleteRoom(room)
       throw new Error(`Failed to delete: ${response.statusText}`);
     }
 
-    window.location.href = '/rooms';
+    document.body.style.opacity = "0";
+    setTimeout(() => {
+      window.location.href = '/rooms';
+      document.body.style.opacity = "1";
+    }, 300)
+    
   }
   catch (error) {
     console.error("error deleting room :", error);
@@ -251,7 +271,12 @@ async function handleEnterRoom(id) {
       }
     }
 
-    window.location.href = `/lobby/?id=${id}`;
+    document.body.style.opacity = "0";
+    setTimeout(() => {
+      window.location.href = `/lobby/?id=${id}`;
+      document.body.style.opacity = "1";
+    }, 300)
+    
 
   } catch (error) {
     console.error(error);
