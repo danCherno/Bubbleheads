@@ -97,42 +97,60 @@ function addRoomRender() {
   <p>Optional</p>
   <input type="submit" onclick="addRoom(event)" value="Create">`;
 }
+
 function closePopup(event) {
   popupElement.style.display = "none";
 }
+
 function search(event) {
+  const searchCopyElement = document.getElementById(
+    "searchInput"
+  ) as HTMLInputElement;
+  if (searchCopyElement) return;
   const searchElement = document.getElementById("searchRoom") as HTMLElement;
+
   const searchBarElement = document.createElement("input") as HTMLInputElement;
-  searchBarElement.type = "text";
+  searchBarElement.type = "search";
   searchBarElement.title = "search";
-  searchBarElement.style.position="relative"
-  searchBarElement.style.top="-100%";
+  searchBarElement.style.position = "relative";
+  searchBarElement.style.top = "-100%";
   searchBarElement.id = "searchInput";
   searchBarElement.addEventListener("blur", handleUnfocus);
-    searchBarElement.addEventListener("input",handleKeyPress);
+
+  searchBarElement.addEventListener("input", handleKeyPress);
   searchElement.appendChild(searchBarElement);
   searchBarElement.focus();
 }
-function handleKeyPress(event){
-  const searchElement = document.getElementById("searchInput") as HTMLInputElement;
+
+function handleKeyPress(event) {
+  const searchElement = document.getElementById(
+    "searchInput"
+  ) as HTMLInputElement;
   const value = searchElement.value;
-  if(value==="") return;
+  if (value === "") {
+    getRooms();
+    return;
+  }
   getRoomsSearch(value);
 }
-function handleUnfocus(event){
-  const searchBarElement = document.getElementById("searchInput") as HTMLInputElement;
-    const globalRoomsContainElement = document.getElementById(
-      "globalRoomsContainer"
-    ) as HTMLElement;
-    const personalRoomsContainElement = document.getElementById(
-      "personalRoomsContainer"
-    ) as HTMLElement;
-    personalRoomsContainElement.innerHTML="";
-    globalRoomsContainElement.innerHTML="";
-  searchBarElement.remove();
-  getRooms();
-  
+
+function handleUnfocus(event) {
+  const searchBarElement = document.getElementById(
+    "searchInput"
+  ) as HTMLInputElement;
+  const globalRoomsContainElement = document.getElementById(
+    "globalRoomsContainer"
+  ) as HTMLElement;
+  const personalRoomsContainElement = document.getElementById(
+    "personalRoomsContainer"
+  ) as HTMLElement;
+
+  if (searchBarElement.value.trim() == "") {
+    searchBarElement.value = "";
+    searchBarElement.remove();
+  }
 }
+
 async function addRoom() {
   try {
     const userInputElement = document.getElementById(
@@ -163,9 +181,9 @@ async function addRoom() {
     console.error("error:", error);
   }
 }
-async function getRoomsSearch(name:string) {
+async function getRoomsSearch(name: string) {
   try {
-    const response = await fetch(`/api/rooms/get-room-search/${name}`)
+    const response = await fetch(`/api/rooms/get-room-search/${name}`);
     const data = await response.json();
     const rooms = data.rooms;
     const email = data.email;
@@ -177,9 +195,9 @@ async function getRoomsSearch(name:string) {
     const personalRoomsContainElement = document.getElementById(
       "personalRoomsContainer"
     ) as HTMLElement;
-    personalRoomsContainElement.innerHTML=""
-  
-    globalRoomsContainElement.innerHTML=""
+    personalRoomsContainElement.innerHTML = "";
+
+    globalRoomsContainElement.innerHTML = "";
     rooms.forEach((room) => {
       getPopulation(room, email);
     });
@@ -264,12 +282,14 @@ function renderRoom(room, population, email) {
     const globalRoomsContainElement = document.getElementById(
       "globalRoomsContainer"
     ) as HTMLElement;
+
     const personalRoomsContainElement = document.getElementById(
       "personalRoomsContainer"
     ) as HTMLElement;
     if (!globalRoomsContainElement || !personalRoomsContainElement)
       throw new Error("room container element not found");
-
+    const copy = document.getElementById(room._id) as HTMLElement;
+    if (copy) return;
     if (room.owner && room.owner !== "admin") {
       if (email === room.owner) {
         personalRoomsContainElement.innerHTML += `
@@ -296,10 +316,12 @@ function renderRoom(room, population, email) {
   }
 }
 async function checkRoomPassword(event) {
-  const id =event.target.id;
-const passwordInputElement= document.getElementById("popPassword")as HTMLInputElement
+  const id = event.target.id;
+  const passwordInputElement = document.getElementById(
+    "popPassword"
+  ) as HTMLInputElement;
   const password = passwordInputElement.value;
-  popupElement.style.display="none";
+  popupElement.style.display = "none";
   const passwordResponse = await fetch("/api/rooms/enter-protected-room", {
     method: "POST",
     headers: {
@@ -311,22 +333,21 @@ const passwordInputElement= document.getElementById("popPassword")as HTMLInputEl
   const { auth } = await passwordResponse.json();
 
   if (!auth) {
-    popupElement.style.display="flex";
-    popupElement.innerHTML=`<div id="closePop" onclick="closePopup(event)">X</div>
+    popupElement.style.display = "flex";
+    popupElement.innerHTML = `<div id="closePop" onclick="closePopup(event)">X</div>
     <h1>incorrect password</h1>
-    <button onclick="closePopup(event)>OK</button>`
+    <button onclick="closePopup(event)>OK</button>`;
     return;
   }
 
   enterRoom(id);
 }
-function enterRoom(id)
-{
+function enterRoom(id) {
   document.body.style.opacity = "0";
-setTimeout(() => {
-  window.location.href = `/lobby/?id=${id}`;
-  document.body.style.opacity = "1";
-}, 300);
+  setTimeout(() => {
+    window.location.href = `/lobby/?id=${id}`;
+    document.body.style.opacity = "1";
+  }, 300);
 }
 async function handleEnterRoom(id) {
   try {
@@ -348,15 +369,15 @@ async function handleEnterRoom(id) {
     const { isProtected } = await testResponse.json();
 
     if (isProtected) {
-      popupElement.style.display="flex";
-      popupElement.innerHTML=`<div id="closePop" onclick="closePopup(event)">X</div>
+      popupElement.style.display = "flex";
+      popupElement.innerHTML = `<div id="closePop" onclick="closePopup(event)">X</div>
       <h1>Enter password</h1>
       <input type="password" title="password" id="popPassword">
       <input type="submit" id="${id}" onclick="checkRoomPassword(event)" value="Enter">`;
-      
+
       return;
-  }
-  enterRoom(id)
+    }
+    enterRoom(id);
   } catch (error) {
     console.error(error);
   }
