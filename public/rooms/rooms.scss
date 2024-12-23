@@ -65,6 +65,10 @@ body {
   }
 
   &_delete {
+    height: 1rem;
+    width: 1rem;
+    text-align: center;
+    font-size: .8rem;
     position: absolute;
     top: 0;
     right: 0;
