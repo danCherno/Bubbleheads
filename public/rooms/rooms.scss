@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
 
 body {
   padding: 0;
@@ -65,8 +65,7 @@ body {
     border-bottom-right-radius: 1rem;
   }
 
-  &_delete
-  {
+  &_delete {
     position: absolute;
     top: 0;
     right: 0;
@@ -167,22 +166,45 @@ body {
     transform: translateY(-5px);
   }
 }
-#uploadForm {
+
+#toolbar {
+  position: fixed;
+  bottom: 0;
+  width: 20vw;
+  height: 4vw;
+  background-color: #1b8769;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  height: 15%;
-  padding: 2vw;
-  background-color: #2276ca;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  flex-direction: row;
   justify-content: space-evenly;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  h1{
-    margin: 0 auto;
-  }  
+  text-align: center;
+  font-size: 3vw;
+  user-select: none;
+  div {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    &:hover {
+      background-color: rgba(245, 245, 245, 0.176);
+      cursor: pointer;
+    }
+  }
+}
+#popUp {
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: fit-content;
+  padding: 4%;
+  height: fit-content;
+  position: fixed;
+  top: 30vh;
+  z-index: 99999;
+  background: rgba(68, 116, 238, 0.931);
+  border-radius: 1rem;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  text-align: center;
+  margin-top: 2rem;
+
   .file-label {
     background-color: #4682b4;
     color: white;
@@ -195,32 +217,78 @@ body {
     transition: background-color 0.3s ease;
     text-align: center;
     display: inline-block;
-    width: 40%;
+    width: 20vw;
   }
   .file-input {
     display: none;
   }
-
+  h1 {
+    margin: 0 auto;
+  }
   .file-label:hover {
     background-color: #3b6d96;
   }
+  #closePop {
+    border-radius: 50%;
+    position: relative;
+    background-color: #2c3e50;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.4rem;
+    justify-content: center;
+    top: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+  h1 {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  p {
+    margin-top: 0;
+  }
+  input[type="submit"] {
+    background-color: #31a8fd;
+    border: 2px solid rgb(19, 172, 255);
+
+    color: white;
+    &:hover {
+      scale: 1.1;
+      transition: all 0.3s;
+    }
+  }
+  input {
+    width: 74%;
+    margin: 0 auto;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    background: rgb(255, 255, 255);
+    color: black;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    &:focus {
+      outline: none;
+      background: white;
+      box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.3);
+    }
+  }
 }
-
-@keyframes retract{
-
-  20%{
+@keyframes retract {
+  20% {
     height: 20%;
   }
-  25%{
+  25% {
     top: 0;
-
   }
-  40%{
+  40% {
     height: 15%;
-   
   }
-  
-  100%{
+
+  100% {
     top: -20%;
   }
 }

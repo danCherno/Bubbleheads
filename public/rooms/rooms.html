@@ -8,18 +8,18 @@
     <script src="./dist/rooms.js" defer></script>
   </head>
   <body onload="main()">
-    <form id="uploadForm" enctype="multipart/form-data" >
-      <h1>upload an image for your avatar!</h1>
-      <label for="fileInput" class="file-label">
-        <span class="file-text">Choose an Image</span>
-        <input type="file" id="fileInput" name="image" class="file-input" onchange="uploadImage(event)" />
-          </label>
-    </form>
+   
+    <div id="popUp" hidden></div>
     <div id="title"><h1>select a room to enter</h1></div>
     <h3>global rooms</h3>
     <div class="roomsContainer" id="globalRoomsContainer"></div>
     <h3>personal rooms</h3>
     <div class="roomsContainer" id="personalRoomsContainer"></div>
-    <div id="addRoom"></div>
+  
+    <div id="toolbar">
+      <div id="createRoom" title="create a room" onclick="addRoomRender(event)">✦</div>
+      <div id="searchRoom" title="search for a room" onclick="search(event)">⌕</div>
+      <div id="changeAvatar" title="modify your avatar"  onclick="changeAvatarRender(event)">⚇</div>
+    </div>
   </body>
 </html>

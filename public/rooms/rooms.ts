@@ -10,7 +10,7 @@ function main() {
     document.body.style.opacity = "1";
   }, 300)
   getRooms();
-  addRoomRender();
+ 
   renderLogOutButton();
 }
 
@@ -82,14 +82,31 @@ async function logOut(event) {
     alert("An error occurred while logging out.");
   }
 }
-function addRoomRender() {
-  const addRoomElement = document.getElementById("addRoom") as HTMLElement;
-  addRoomElement.innerHTML = `<h1>Add a Room</h1>
-  <input type="text" id="roomName" placeholder="write the name to the room">
-  <input type="password" id="password" placeholder="room password">
-  <input type="submit" onclick="addRoom(event)">`;
-}
+const popupElement = document.getElementById("popUp") as HTMLElement;
 
+function changeAvatarRender(event){
+  popupElement.style.display="flex";
+  popupElement.innerHTML=`<div id="closePop" onclick="closePopup(event)">X</div>
+   <form id="uploadForm" enctype="multipart/form-data" >
+      <h1>upload an image for your avatar!</h1>
+      <label for="fileInput" class="file-label">
+        <span class="file-text">Choose an Image</span>
+        <input type="file" id="fileInput" name="image" class="file-input" onchange="uploadImage(event)" />
+          </label>
+    </form>`
+}
+function addRoomRender() {
+  popupElement.style.display="flex";
+  popupElement.innerHTML = `<div id="closePop" onclick="closePopup(event)">X</div><h1>Add a Room</h1>
+  <input type="text" id="roomName" placeholder="room name">
+  <input type="password" id="password" placeholder="room password">
+  <p>Optional</p>
+  <input type="submit" onclick="addRoom(event)" value="Create">`;
+}
+function closePopup(event){
+  popupElement.style.display="none";
+
+}
 async function addRoom() {
   try {
     const userInputElement = document.getElementById("roomName") as HTMLInputElement;
