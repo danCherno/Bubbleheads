@@ -46,7 +46,7 @@ async function uploadImage(event) {
       popupElement.innerHTML = "<h1> image uploaded successfully!</h1>";
       setTimeout(closePopup, 2300);
     }
-    console.log(result);
+    //console.log(result);
   } catch (error) {
     console.error("Error uploading image:", error);
   }
@@ -170,7 +170,7 @@ async function getRoomsSearch(name:string) {
     const rooms = data.rooms;
     const email = data.email;
     if (!rooms) throw new Error("something went wrong or no rooms");
-    console.log(data.message);
+
     const globalRoomsContainElement = document.getElementById(
       "globalRoomsContainer"
     ) as HTMLElement;
@@ -295,6 +295,39 @@ function renderRoom(room, population, email) {
     console.error("error rendering rooms: ", error);
   }
 }
+async function checkRoomPassword(event) {
+  const id =event.target.id;
+const passwordInputElement= document.getElementById("popPassword")as HTMLInputElement
+  const password = passwordInputElement.value;
+  popupElement.style.display="none";
+  const passwordResponse = await fetch("/api/rooms/enter-protected-room", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id, password }),
+  });
+
+  const { auth } = await passwordResponse.json();
+
+  if (!auth) {
+    popupElement.style.display="flex";
+    popupElement.innerHTML=`<div id="closePop" onclick="closePopup(event)">X</div>
+    <h1>incorrect password</h1>
+    <button onclick="closePopup(event)>OK</button>`
+    return;
+  }
+
+  enterRoom(id);
+}
+function enterRoom(id)
+{
+  document.body.style.opacity = "0";
+setTimeout(() => {
+  window.location.href = `/lobby/?id=${id}`;
+  document.body.style.opacity = "1";
+}, 300);
+}
 async function handleEnterRoom(id) {
   try {
     await fetch("/api/rooms/leave-room", {
@@ -315,28 +348,15 @@ async function handleEnterRoom(id) {
     const { isProtected } = await testResponse.json();
 
     if (isProtected) {
-      const password = prompt("Please enter the room password");
-      const passwordResponse = await fetch("/api/rooms/enter-protected-room", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id, password }),
-      });
-
-      const { auth } = await passwordResponse.json();
-
-      if (!auth) {
-        alert("Incorrect password");
-        return;
-      }
-    }
-
-    document.body.style.opacity = "0";
-    setTimeout(() => {
-      window.location.href = `/lobby/?id=${id}`;
-      document.body.style.opacity = "1";
-    }, 300);
+      popupElement.style.display="flex";
+      popupElement.innerHTML=`<div id="closePop" onclick="closePopup(event)">X</div>
+      <h1>Enter password</h1>
+      <input type="password" title="password" id="popPassword">
+      <input type="submit" id="${id}" onclick="checkRoomPassword(event)" value="Enter">`;
+      
+      return;
+  }
+  enterRoom(id)
   } catch (error) {
     console.error(error);
   }

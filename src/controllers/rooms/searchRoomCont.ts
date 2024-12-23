@@ -1,9 +1,7 @@
 
 import { LobbyModel } from "../../models/lobbyModel";
-import bcrypt from 'bcrypt';
 import jwt from 'jwt-simple';
 import { secretKey } from "../../server";
-import { LobbyUsersModel } from "../../models/lobbyUsersModel";
 
 export async function getRoomsSearch(req: any, res: any) {
   try {
@@ -18,7 +16,6 @@ export async function getRoomsSearch(req: any, res: any) {
       }
     const decryptedUser = jwt.decode(user, secretKey) 
     const email = decryptedUser.email;
-    console.log(name);
     const rooms = await LobbyModel.find({name: { 
         $regex: name, 
         $options: 'i' }});
