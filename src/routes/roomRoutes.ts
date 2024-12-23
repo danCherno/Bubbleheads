@@ -6,6 +6,7 @@ import { enterRoom } from '../controllers/rooms/enterRoom';
 import { leaveRoom } from '../controllers/rooms/leaveRoomCont';
 import { deleteRoom } from '../controllers/rooms/deleteRoom';
 import { enterProtectedRoom } from '../controllers/rooms/enterProtectedRoom';
+import { getRoomsSearch } from '../controllers/rooms/searchRoomCont';
 
 
 
@@ -18,6 +19,6 @@ router.post('/enter-protected-room', enterProtectedRoom);
 router.post('/leave-room', leaveRoom);
 router.get('/get-room', getRooms);
 router.delete('/delete-room/:roomId',deleteRoom);
-
+router.get('/get-room-search/:name',getRoomsSearch)
 
 export default router;

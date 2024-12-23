@@ -12,7 +12,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   transition: opacity 0.3s ease;
 }
 
@@ -96,7 +95,11 @@ body {
   width: 100%;
   background-color: #e74c3c;
 }
-
+#searchInput{
+  width: 15vw;
+  height: 100%;
+  margin: 0;
+}
 #addRoom {
   width: 90%;
   max-width: 400px;
@@ -170,7 +173,7 @@ body {
 #toolbar {
   position: fixed;
   bottom: 0;
-  width: 20vw;
+  width: fit-content;
   height: 4vw;
   background-color: #1b8769;
   display: flex;
@@ -179,9 +182,14 @@ body {
   text-align: center;
   font-size: 3vw;
   user-select: none;
+  #searchRoom{
+    width: fit-content;
+    align-items: center;
+  }
   div {
-    width: 100%;
     height: 100%;
+    padding: 1vw;
+    padding-top: 0;
     flex: 1;
     &:hover {
       background-color: rgba(245, 245, 245, 0.176);
@@ -206,7 +214,7 @@ body {
   margin-top: 2rem;
 
   .file-label {
-    background-color: #4682b4;
+    background-color: #31a8fd;
     color: white;
     font-size: 1rem;
     font-weight: bold;
@@ -217,7 +225,7 @@ body {
     transition: background-color 0.3s ease;
     text-align: center;
     display: inline-block;
-    width: 20vw;
+    width: 60%;
   }
   .file-input {
     display: none;
@@ -226,7 +234,7 @@ body {
     margin: 0 auto;
   }
   .file-label:hover {
-    background-color: #3b6d96;
+    background-color: #31a8fd;;
   }
   #closePop {
     border-radius: 50%;
