@@ -44,40 +44,48 @@ function moveAvatar(targetX, targetY, id) {
   if (avatarElement) {
     const parentElement = avatarElement.offsetParent as HTMLElement;
     if (!parentElement) return;
+  
+    const avatarIcon = avatarElement.getElementsByClassName("avatar").item(0) as HTMLImageElement;
+    if (!avatarIcon) return; 
 
-    const parentRect = parentElement.getBoundingClientRect();
+    avatarIcon.style.height = "50%";
+    setTimeout(() => {
+      avatarIcon.style.height = "70%";
+  
+      const parentRect = parentElement.getBoundingClientRect();
 
-    const targetXInPixels = (targetX / 100) * parentRect.width;
-    const targetYInPixels = (targetY / 100) * parentRect.height;
+      const targetXInPixels = (targetX / 100) * parentRect.width;
+      const targetYInPixels = (targetY / 100) * parentRect.height;
 
-    const currentTransform = window.getComputedStyle(avatarElement).transform;
-    let currentX = 0;
-    let currentY = 0;
+      const currentTransform = window.getComputedStyle(avatarElement).transform;
+      let currentX = 0;
+      let currentY = 0;
 
-    if (currentTransform !== "none") {
-      const matrix = currentTransform.match(/matrix\(([^)]+)\)/);
-      if (matrix) {
-        const values = matrix[1].split(", ");
-        currentX = parseFloat(values[4]);
-        currentY = parseFloat(values[5]);
+      if (currentTransform !== "none") {
+        const matrix = currentTransform.match(/matrix\(([^)]+)\)/);
+        if (matrix) {
+          const values = matrix[1].split(", ");
+          currentX = parseFloat(values[4]);
+          currentY = parseFloat(values[5]);
+        }
       }
-    }
 
-    const deltaX = targetXInPixels - currentX;
-    const deltaY = targetYInPixels - currentY;
+      const deltaX = targetXInPixels - currentX;
+      const deltaY = targetYInPixels - currentY;
 
-    const rect = avatarElement.getBoundingClientRect();
-    const avatarWCenter = rect.width * 0.5;
-    const avatarHCenter = rect.height * 0.7;
-    const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+      const rect = avatarElement.getBoundingClientRect();
+      const avatarWCenter = rect.width * 0.5;
+      const avatarHCenter = rect.height * 0.7;
+      const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
 
-    const speed = 500;
-    const duration = distance / speed;
+      const speed = 500;
+      const duration = distance / speed;
 
-    avatarElement.style.transition = `transform ${duration}s linear`;
-    avatarElement.style.transform = `translate(${
-      targetXInPixels - avatarWCenter
-    }px, ${targetYInPixels - avatarHCenter}px)`;
+      avatarElement.style.transition = `transform ${duration}s linear`;
+      avatarElement.style.transform = `translate(${
+        targetXInPixels - avatarWCenter
+      }px, ${targetYInPixels - avatarHCenter}px)`;
+    }, 200);
   }
 }
 function deleteUserElement(id) {
@@ -132,7 +140,7 @@ function renderUser(user) {
     const iconElement = document.createElement("img");
     iconElement.src = imageSrc;
     iconElement.classList.add("icon");
-    userElement.appendChild(iconElement);
+    userAvatarElement.appendChild(iconElement);
   }
   if (user.position) {
     const { x, y } = user.position;
