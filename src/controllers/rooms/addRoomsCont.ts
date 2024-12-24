@@ -10,8 +10,9 @@ export async function addRoom(req: any, res: any) {
 
     const decryptedUser= jwt.decode(user,secretKey);
     if(!decryptedUser) throw new Error("error decoding user")
-
-    const newRoom =await LobbyModel.create({name: name, owner: decryptedUser.email, theme:theme});
+      if (password){
+    const newRoom =await LobbyModel.create({name: name, owner: decryptedUser.email,password:password, theme:theme});
+  }else {const newRoom =await LobbyModel.create({name: name, owner: decryptedUser.email, theme:theme});}
     res.json({message:`success! room called ${name} was created`})
   } catch (error) {
     console.error("Error during room creation:", error);
