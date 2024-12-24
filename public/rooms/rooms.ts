@@ -95,6 +95,13 @@ function addRoomRender() {
   <input type="text" id="roomName" placeholder="room name">
   <input type="password" id="password" placeholder="room password">
   <p>Optional</p>
+  <label for="theme">Choose a theme:</label>
+<select id="theme" name="theme">
+  <option value="club">Club</option> 
+ <option value="desert">Desert</option>
+  <option value="snow">Snow</option>
+  <option value="space">Space</option>
+</select>
   <input type="submit" onclick="addRoom(event)" value="Create">`;
 }
 
@@ -159,6 +166,9 @@ async function addRoom() {
     const passwordInputElement = document.getElementById(
       "password"
     ) as HTMLInputElement;
+    const themeElement = document.getElementById("theme") as HTMLSelectElement;
+
+    const theme = themeElement.value;
     const name = userInputElement.value;
     const password = passwordInputElement.value;
 
@@ -167,7 +177,7 @@ async function addRoom() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, password }),
+      body: JSON.stringify({ name, password,theme }),
     });
 
     const data = await response.json();
@@ -293,20 +303,21 @@ function renderRoom(room, population, email) {
     if (room.owner && room.owner !== "admin") {
       if (email === room.owner) {
         personalRoomsContainElement.innerHTML += `
-          <div class="room" id="${room._id}">
+          <div class="${room.theme} room" id="${room._id}">
             <h1 class="room_name" onclick="handleEnterRoom('${room._id}')">${room.name}</h1>
             <div class="room_population ${population}"></div>
             <div class="room_delete" onclick="deleteRoom('${room._id}')"> X </div>
           </div>`;
       } else {
         personalRoomsContainElement.innerHTML += `
-          <div class="room" id="${room._id}" onclick="handleEnterRoom('${room._id}')">
+          <div class="${room.theme} room" id="${room._id}" onclick="handleEnterRoom('${room._id}')">
           <h1 class="room_name">${room.name}</h1>
           <div class="room_population ${population}"></div>
           </div>`;
       }
     } else {
-      globalRoomsContainElement.innerHTML += ` <div class="room" id="${room._id}" onclick="handleEnterRoom('${room._id}')">
+      globalRoomsContainElement.innerHTML += ` <div class="${room.theme} room" id="${room._id}"
+       onclick="handleEnterRoom('${room._id}')">
         <h1 class="room_name">${room.name}</h1>
         <div class="room_population ${population}"></div>
       </div>`;
