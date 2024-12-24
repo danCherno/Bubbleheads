@@ -12,7 +12,10 @@ const socket = io("http://localhost:3000");
 socket.on("user-joined", (user) => {
   renderUser(user);
 });
-
+socket.on("roomTheme", (theme) => {
+  console.log(theme)
+  setTheme(theme);
+});
 socket.on("response", (name, msg, id) => {
   addToChat(name, msg, id);
 });
@@ -39,6 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 300)
 });
 
+function setTheme(theme){
+  const arenaElement = document.getElementById("arena") as HTMLElement;
+  arenaElement.classList.remove(...arenaElement.classList);
+  arenaElement.classList.add(theme);
+}
 function moveAvatar(targetX, targetY, id) {
   const avatarElement = document.getElementById(id) as HTMLElement;
   if (avatarElement) {

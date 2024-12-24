@@ -9,6 +9,7 @@ interface IUser {
 interface ILobby {
   _id: Schema.Types.ObjectId;
   name: string;
+  theme:string;
 }
 
 // Define the LobbyUser type, extending Document

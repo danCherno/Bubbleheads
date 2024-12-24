@@ -19,13 +19,7 @@ body {
 
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(
-      to bottom,
-      #87cefa 35%,
-      #e7f29d 40%,
-      #e7f29d 60%,
-      #d1b08c 100%
-    );
+    
   }
 }
 
@@ -192,4 +186,43 @@ body {
   border-radius: 50%;
   position: absolute;
   top:0
+}
+.club {
+  background-image: linear-gradient(
+    to bottom,
+    #87cefa 35%,  /* Light blue */
+    #5542ff 40%,  /* Lime green */
+    #202585 60%,  /* Pale green */
+    #c72ded 100%  /* Beige */
+  );
+}
+
+.desert {
+  background-image: linear-gradient(
+    to bottom,
+    #f4a261 35%,  /* Sandy orange */
+    #f4a261 40%,  /* Sandy orange */
+    #d89c57 60%,  /* Desert yellow */
+    #a0522d 100%  /* Brown */
+  );
+}
+
+.snow {
+  background-image: linear-gradient(
+    to bottom,
+    #b0e0e6 35%,  /* Powder blue */
+    #ffffff 40%,  /* Snow white */
+    #ffffff 60%,  /* Snow white */
+    #a9a9a9 100%  /* Dark gray (ice) */
+  );
+}
+
+.space {
+  background-image: linear-gradient(
+    to bottom,
+    #2b2d42 35%,  /* Dark blue */
+    #8d99ae 40%,  /* Light grayish blue */
+    #edf2f4 60%,  /* Off-white */
+    #ef233c 100%  /* Space red */
+  );
 }
