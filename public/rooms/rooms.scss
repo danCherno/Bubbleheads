@@ -35,7 +35,7 @@ body {
 }
 
 .room {
-  background: linear-gradient(135deg, #34495e, #2c3e50);
+  background: linear-gradient(135deg, #34495e 75%, #ffffff00 75%);
   border-radius: 1rem;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   overflow: hidden;
@@ -68,7 +68,7 @@ body {
     height: 1rem;
     width: 1rem;
     text-align: center;
-    font-size: .8rem;
+    font-size: 0.8rem;
     position: absolute;
     top: 0;
     right: 0;
@@ -99,7 +99,8 @@ body {
   width: 100%;
   background-color: #e74c3c;
 }
-#searchInput{
+
+#searchInput {
   width: 15vw;
   height: 100%;
   margin: 0;
@@ -186,7 +187,7 @@ body {
   text-align: center;
   font-size: 3vw;
   user-select: none;
-  #searchRoom{
+  #searchRoom {
     width: fit-content;
     align-items: center;
   }
@@ -208,14 +209,15 @@ body {
   padding: 4%;
   height: fit-content;
   position: fixed;
-  top: 30vh;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
   z-index: 99999;
   background: rgba(68, 116, 238, 0.931);
   border-radius: 1rem;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   text-align: center;
-  margin-top: 2rem;
 
   .file-label {
     background-color: #31a8fd;
@@ -238,7 +240,7 @@ body {
     margin: 0 auto;
   }
   .file-label:hover {
-    background-color: #31a8fd;;
+    background-color: #31a8fd;
   }
   #closePop {
     border-radius: 50%;
@@ -289,6 +291,37 @@ body {
     }
   }
 }
+.club { 
+  background: linear-gradient(135deg, #34495e 75%, #ecf0f179 75%);
+  background-image: linear-gradient(135deg, #34495e 75%,  #5d7afb8d 75%),
+                   radial-gradient(circle, rgb(79, 42, 229) 12px, transparent 12px); 
+  background-size: 100% 100%, 24px 24px;
+
+}
+
+.desert {
+  background: linear-gradient(135deg, #34495e 75%, #ecf0f1 75%);
+  background-image: linear-gradient(135deg, #34495e 75%, #f4a560eb 75%),
+    radial-gradient(circle, rgb(255, 171, 60) 2px, transparent 2px);
+  background-size: 100% 100%, 4px 4px;
+}
+
+.snow {
+  background: linear-gradient(135deg, #34495e 75%, #ecf0f1 75%);
+  background-image: linear-gradient(135deg, #34495e 75%, #f9fafba5 75%),
+    radial-gradient(circle, rgba(255, 255, 255, 0.713) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.841) 2px, transparent 2px);
+  background-size: 100% 100%, 20px 15px, 30px 26px;
+}
+
+.space {
+  background: linear-gradient(135deg, #34495e 75%, #ecf0f179 75%);
+  background-image: linear-gradient(135deg, #34495e 75%, #0000009e 75%),
+    radial-gradient(circle, rgba(255, 255, 255, 1) 1px, transparent 1px),
+    radial-gradient(circle, rgb(255, 255, 255) 2px, transparent 2px);
+  background-size: 100% 100%, 20px 20px, 30px 30px;
+}
+
 @keyframes retract {
   20% {
     height: 20%;

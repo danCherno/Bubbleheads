@@ -12,6 +12,11 @@ export const LobbySchema = new Schema({
     password:{
         type: String,
         required: false
+    },  
+    theme: {
+        type: String,
+        enum: ["club","desert","snow","space"],
+        required: true,
     }
 })
 

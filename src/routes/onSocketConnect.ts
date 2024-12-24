@@ -9,9 +9,10 @@ export function onSocketConnect(socket: any)
     
         if (!socket.user) throw new Error("no name found");
         const roomId = socket.user.roomId; 
- 
+      const theme= socket.user.theme ;
         socket.join(roomId);
-    
+
+        socket.emit("roomTheme",  theme); 
         socket.to(roomId).emit("user-joined", socket.user);
         
         socket.on("update-position", (x:number,y:number) => updatePosition(socket,x,y));

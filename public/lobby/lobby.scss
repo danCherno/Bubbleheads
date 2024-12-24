@@ -32,13 +32,7 @@ body {
 
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(
-      to bottom,
-      #87cefa 35%,
-      #e7f29d 40%,
-      #e7f29d 60%,
-      #d1b08c 100%
-    );
+    
   }
 }
 
@@ -86,15 +80,16 @@ body {
   bottom: 3.5vw;
   right: 13vw;
   z-index: 9999;
+  font-size: 1vw;
   border: 1px solid black;
-  border-radius: 5px; 
-  background-color: rgba(255, 255, 255, 0.589);
+  border-radius: 20px; 
+  background-color: rgba(149, 213, 255, 0.695);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease; 
 }
 
 #resetChatPos:hover {
-  background-color: rgb(253, 250, 250);
+  background-color: rgb(41, 102, 224);
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
@@ -207,4 +202,43 @@ body {
   border-radius: 50%;
   position: absolute;
   top:0
+}
+.club {
+  background-image: linear-gradient(
+    to bottom,
+    #87cefa 35%,  /* Light blue */
+    #5542ff 40%,  /* Lime green */
+    #202585 60%,  /* Pale green */
+    #c72ded 100%  /* Beige */
+  );
+}
+
+.desert {
+  background-image: linear-gradient(
+    to bottom,
+    #f4a261 35%,  /* Sandy orange */
+    #f4a261 40%,  /* Sandy orange */
+    #d89c57 60%,  /* Desert yellow */
+    #a0522d 100%  /* Brown */
+  );
+}
+
+.snow {
+  background-image: linear-gradient(
+    to bottom,
+    #b0e0e6 35%,  /* Powder blue */
+    #ffffff 40%,  /* Snow white */
+    #ffffff 60%,  /* Snow white */
+    #a9a9a9 100%  /* Dark gray (ice) */
+  );
+}
+
+.space {
+  background-image: linear-gradient(
+    to bottom,
+    #2b2d42 35%,  /* Dark blue */
+    #8d99ae 40%,  /* Light grayish blue */
+    #edf2f4 60%,  /* Off-white */
+    #ef233c 100%  /* Space red */
+  );
 }
