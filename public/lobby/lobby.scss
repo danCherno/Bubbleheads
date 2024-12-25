@@ -106,11 +106,11 @@ body {
   justify-content: end;
 
   .avatar {
-    width: 5vh;
     height: 70%;
     border-radius: 20px;
-    background-image: url(./spring.png);
+    background-image: url(../assets/spring.png);
     background-size: cover;
+    width: 3vw;
     background-position: center;
     filter: sepia(1) hue-rotate(350deg);
     transition: height 200ms;
