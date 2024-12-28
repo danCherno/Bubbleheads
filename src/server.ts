@@ -26,7 +26,7 @@ const port = 3000;
 
 // secret variables initialization
 export const secretKey = process.env.SECRET_KEY || "1234";
-export const saltRounds = process.env.SALT_ROUNDS || 3;
+export const saltRounds = Number(process.env.SALT_ROUNDS) || 3;
 
 //db's variables initialization
 const dbUrl = process.env.DB_URL;
